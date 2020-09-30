@@ -1,0 +1,4 @@
+[debug] [scala-magnolia-test] Classpath dependencies List()
+[debug] [scala-magnolia-test] Dependencies from configurations List(scala-magnolia)
+[debug] Bloop wrote the configuration of project 'scala-magnolia-test' to 'D:\Proyectos\staff\scala-magnolia\.bloop\scala-magnolia-test.json'
+[success] Generated .bloop\scala-magnolia-test.json
