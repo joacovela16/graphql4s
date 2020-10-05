@@ -3,8 +3,298 @@
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="18547df9-e0c2-4838-8730-1232c0f853f9" name="Default Changelist" comment="" />
+    <list default="true" id="18547df9-e0c2-4838-8730-1232c0f853f9" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/scala/SchemaDerivation.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/bloop.settings.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia-test.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/META-INF/semanticdb/src/main/scala/Main.scala.semanticdb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/META-INF/semanticdb/src/main/scala/StructTypeDerivation.scala.semanticdb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/META-INF/semanticdb/src/main/scala/encoder/package.scala.semanticdb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/META-INF/semanticdb/src/main/scala/model/package.scala.semanticdb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/META-INF/semanticdb/src/main/scala/utils/package.scala.semanticdb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/Main$$anon$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/Main$$anon$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/Main$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/Main$CurrentLocation$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/Main$CurrentLocation.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/Main$Human$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/Main$Human.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/Main$Location$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/Main$Location.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/Main.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/StructTypeDerivation$$anon$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/StructTypeDerivation$$anon$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/StructTypeDerivation$$anon$3$$anon$4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/StructTypeDerivation$$anon$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/StructTypeDerivation$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/StructTypeDerivation.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/encoder/package$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/encoder/package.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/model/package$$anon$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/model/package$$anon$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/model/package$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/model/package$Commander.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/model/package$IArray$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/model/package$IArray.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/model/package$IField$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/model/package$IField.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/model/package$IFunction.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/model/package$INumber$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/model/package$INumber.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/model/package$IObject$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/model/package$IObject.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/model/package$IOption$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/model/package$IOption.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/model/package$IString$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/model/package$IString.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/model/package$Interpreter$$typecreator1$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/model/package$Interpreter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/model/package$InterpreterError$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/model/package$InterpreterError.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/model/package.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/utils/package$$colon$colon$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/utils/package$$colon$colon.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/utils/package$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/utils/package$ArgBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/utils/package$ArgNil$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/utils/package$ArgNil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/utils/package$HList.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/utils/package$HNil$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/utils/package$HNil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/utils/package$Utils.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/utils/package$Utils2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/utils/package$add$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/utils/package$add.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bloop/scala-magnolia/bloop-internal-classes/classes-Metals-DfC-5AOORta_fRk7x7A5rA==-iFv21sZzRQ6azbugJsecFQ==/utils/package.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.metals/metals.h2.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.metals/metals.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.metals/readonly/scala/collection/immutable/List.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.sbt" beforeDir="false" afterPath="$PROJECT_DIR$/build.sbt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/.bloop/bloop.settings.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/.bloop/scala-magnolia-build.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/build.properties" beforeDir="false" afterPath="$PROJECT_DIR$/project/build.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/metals.sbt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/project/target/config-classes/$450efeb851cf3e03b7c4$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/project/target/config-classes/$450efeb851cf3e03b7c4.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/project/target/config-classes/$450efeb851cf3e03b7c4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/config-classes/$b722a66234522de8873d$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/config-classes/$b722a66234522de8873d.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/config-classes/$b722a66234522de8873d.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/scala-2.12/sbt-1.0/update/update_cache_2.12/inputs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/scala-2.12/sbt-1.0/update/update_cache_2.12/output" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/_global/_global/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/_global/_global/csrLogger/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/_global/csrConfiguration/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/_global/csrProject/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/_global/dependencyPositions/_global/streams/update_cache_2.12/input_dsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/_global/dependencyPositions/_global/streams/update_cache_2.12/output_dsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/_global/ivyConfiguration/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/_global/ivySbt/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/_global/moduleSettings/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/_global/projectDescriptors/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/_global/scalaCompilerBridgeScope/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/_global/update/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/compile/_global/_global/compileBinaryFileInputs/previous" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/compile/_global/_global/compileOutputs/previous" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/compile/_global/_global/compileSourceFileInputs/previous" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/compile/_global/_global/dependencyClasspathFiles/previous" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/compile/_global/_global/discoveredMainClasses/data" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/compile/_global/_global/managedSourcePaths/previous" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/compile/compile/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/compile/compileIncremental/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/compile/compileIncremental/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/compile/copyResources/_global/streams/copy-resources" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/compile/copyResources/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/compile/dependencyClasspath/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/compile/exportedProducts/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/compile/externalDependencyClasspath/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/compile/internalDependencyClasspath/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/compile/managedClasspath/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/compile/unmanagedClasspath/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/compile/unmanagedJars/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/runtime/dependencyClasspath/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/runtime/exportedProducts/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/runtime/externalDependencyClasspath/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/runtime/fullClasspath/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/runtime/internalDependencyClasspath/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/runtime/managedClasspath/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/runtime/unmanagedClasspath/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/target/streams/runtime/unmanagedJars/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$1e7360ed1669c23ff6ff$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$1e7360ed1669c23ff6ff.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$1e7360ed1669c23ff6ff.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$3408355f616e814de82d$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$3408355f616e814de82d.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$3408355f616e814de82d.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$3713af9c2ff176c1ae1a$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$3713af9c2ff176c1ae1a.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$3713af9c2ff176c1ae1a.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$4d19fd30baf9c469f7d6$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$4d19fd30baf9c469f7d6.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$4d19fd30baf9c469f7d6.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$54194a9570fed7b9efaa$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$54194a9570fed7b9efaa.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$54194a9570fed7b9efaa.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$565390189c7980626a38$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$565390189c7980626a38.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$565390189c7980626a38.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$5ffa06a80d327e1dc4e9$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$5ffa06a80d327e1dc4e9.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$5ffa06a80d327e1dc4e9.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$68c22514c82268a3d7d5$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$68c22514c82268a3d7d5.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$68c22514c82268a3d7d5.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$93008bb01342ebc348a2$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$93008bb01342ebc348a2.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$93008bb01342ebc348a2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$a56610de78b446069123$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$a56610de78b446069123.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$a56610de78b446069123.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$d1806c1caf36f134014d$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$d1806c1caf36f134014d.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$d1806c1caf36f134014d.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$e839b8d4b530d8c4c2fb$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$e839b8d4b530d8c4c2fb.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$e839b8d4b530d8c4c2fb.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$f0029045c5c6390d0347$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$f0029045c5c6390d0347.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$f0029045c5c6390d0347.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$f21a28cc5a2255c9937d$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$f21a28cc5a2255c9937d.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$f21a28cc5a2255c9937d.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$f9098e14165a74158403$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$f9098e14165a74158403.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/config-classes/$f9098e14165a74158403.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/scala-2.12/sbt-1.0/update/update_cache_2.12/inputs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/scala-2.12/sbt-1.0/update/update_cache_2.12/output" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/_global/_global/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/_global/_global/csrLogger/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/_global/csrConfiguration/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/_global/csrProject/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/_global/dependencyPositions/_global/streams/update_cache_2.12/input_dsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/_global/dependencyPositions/_global/streams/update_cache_2.12/output_dsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/_global/ivyConfiguration/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/_global/ivySbt/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/_global/moduleSettings/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/_global/projectDescriptors/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/_global/scalaCompilerBridgeScope/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/_global/update/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/_global/updateSbtClassifiers/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/compile/_global/_global/compileBinaryFileInputs/previous" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/compile/_global/_global/compileOutputs/previous" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/compile/_global/_global/compileSourceFileInputs/previous" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/compile/_global/_global/dependencyClasspathFiles/previous" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/compile/_global/_global/discoveredMainClasses/data" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/compile/_global/_global/managedSourcePaths/previous" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/compile/bloopGenerate/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/compile/bloopPostGenerate/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/compile/compile/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/compile/compileIncremental/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/compile/compileIncremental/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/compile/copyResources/_global/streams/copy-resources" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/compile/copyResources/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/compile/dependencyClasspath/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/compile/exportedProducts/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/compile/externalDependencyClasspath/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/compile/internalDependencyClasspath/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/compile/managedClasspath/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/compile/unmanagedClasspath/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/compile/unmanagedJars/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/it/bloopGenerate/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/it/bloopPostGenerate/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/runtime/dependencyClasspath/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/runtime/exportedProducts/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/runtime/externalDependencyClasspath/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/runtime/fullClasspath/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/runtime/internalDependencyClasspath/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/runtime/managedClasspath/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/runtime/unmanagedClasspath/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/runtime/unmanagedJars/_global/streams/export" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/test/bloopGenerate/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/target/streams/test/bloopPostGenerate/_global/streams/out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/GraphQLParser.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GraphQLParser.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/StructTypeDerivation.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/StructTypeDerivation.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/model/package.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/model/package.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$$anon$1$$anon$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$$anon$1$$anon$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$$anon$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$$anon$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$$anon$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$$anon$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$$anon$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$$anon$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$$anon$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$$anon$5.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$$anon$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$$anon$6.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$$anonfun$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$$anonfun$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$$anonfun$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$$anonfun$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$Alias$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$Alias$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$Alias.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$Alias.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$CurrentLocation$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$CurrentLocation$2$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$Expr.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$Expr.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$FragmentDef$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$FragmentDef$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$FragmentDef.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$FragmentDef.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$FragmentRef$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$FragmentRef$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$FragmentRef.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$FragmentRef.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$FunctionExtractor$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$FunctionExtractor$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$FunctionExtractor.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$FunctionExtractor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$Human$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$Human$2$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$LiteralValue$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$LiteralValue$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$LiteralValue.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$LiteralValue.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$Location$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$Location$2$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$ObjExtractor$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$ObjExtractor$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$ObjExtractor.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$ObjExtractor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$ValueRef$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$ValueRef$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$ValueRef.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser$ValueRef.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/GraphQLParser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/StructTypeDerivation$$anon$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/StructTypeDerivation$$anon$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/StructTypeDerivation$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/StructTypeDerivation$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$$anon$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$$anon$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$$anon$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$$anon$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$IArray$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$IArray$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$IArray.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$IArray.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$IFunction.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$IFunction.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$INumber$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$INumber$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$INumber.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$INumber.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$IObject$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$IObject$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$IObject.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$IObject.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$IOption$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$IOption$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$IOption.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$IOption.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$IString$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$IString$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$IString.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$IString.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$Interpreter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$Interpreter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$InterpreterError$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$InterpreterError$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$InterpreterError.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$InterpreterError.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$JsonRender$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$JsonRender$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$Link.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/model/package$Link.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/model/package.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/model/package.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/update/update_cache_2.12/inputs" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/update/update_cache_2.12/inputs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/update/update_cache_2.12/output" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/update/update_cache_2.12/output" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/streams/_global/_global/checkBuildSources/_global/inputFileStamps/previous" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/_global/_global/checkBuildSources/_global/inputFileStamps/previous" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/streams/_global/_global/csrLogger/_global/streams/out" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/_global/_global/csrLogger/_global/streams/out" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/streams/_global/dependencyPositions/_global/streams/update_cache_2.12/input_dsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/_global/dependencyPositions/_global/streams/update_cache_2.12/input_dsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/streams/_global/dependencyPositions/_global/streams/update_cache_2.12/output_dsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/_global/dependencyPositions/_global/streams/update_cache_2.12/output_dsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/streams/_global/updateClassifiers/_global/streams/update_cache_2.12/inputs" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/_global/updateClassifiers/_global/streams/update_cache_2.12/inputs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/streams/_global/updateClassifiers/_global/streams/update_cache_2.12/output" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/_global/updateClassifiers/_global/streams/update_cache_2.12/output" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/streams/compile/externalDependencyClasspath/_global/streams/export" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/compile/externalDependencyClasspath/_global/streams/export" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/streams/compile/managedClasspath/_global/streams/export" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/compile/managedClasspath/_global/streams/export" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/streams/runtime/externalDependencyClasspath/_global/streams/export" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/runtime/externalDependencyClasspath/_global/streams/export" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/streams/runtime/managedClasspath/_global/streams/export" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/runtime/managedClasspath/_global/streams/export" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/streams/test/externalDependencyClasspath/_global/streams/export" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/test/externalDependencyClasspath/_global/streams/export" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/streams/test/managedClasspath/_global/streams/export" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/test/managedClasspath/_global/streams/export" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -42,6 +332,9 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="JupyterTrust" id="a634a1d0-73e3-46cc-9901-d238dd4bb149" />
   <component name="ProjectCodeStyleSettingsMigration">
     <option name="version" value="1" />
@@ -64,6 +357,11 @@
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="sbt.project.settings.configurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="" />
+    </key>
   </component>
   <component name="RunManager" selected="Application.Parser">
     <configuration name="GraphQL" type="Application" factoryName="Application" temporary="true">
@@ -101,11 +399,22 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Parser" />
-        <item itemvalue="Application.Main" />
         <item itemvalue="Application.ShapelessExample" />
+        <item itemvalue="Application.Main" />
         <item itemvalue="Application.Interpreter" />
         <item itemvalue="Application.GraphQL" />
       </list>
@@ -157,32 +466,51 @@
       <workItem from="1601485923416" duration="1596000" />
       <workItem from="1601488836232" duration="2327000" />
       <workItem from="1601492235660" duration="5899000" />
+      <workItem from="1601509256785" duration="28583000" />
+      <workItem from="1601593611933" duration="14109000" />
+      <workItem from="1601669619485" duration="595000" />
+      <workItem from="1601907446219" duration="2105000" />
+      <workItem from="1601909834916" duration="362000" />
+      <workItem from="1601918385930" duration="1203000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
   <component name="WindowStateProjectService">
     <state x="-1368" y="259" key="#Plugins" timestamp="1599736577530">
       <screen x="-1920" y="98" width="1920" height="1040" />
     </state>
     <state x="-1368" y="259" key="#Plugins/0.0.1920.1040/-1920.98.1920.1040@-1920.98.1920.1040" timestamp="1599736577530" />
-    <state x="690" y="275" key="#com.intellij.codeInsight.editorActions.RestoreReferencesDialog" timestamp="1601469727592">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="-1230" y="373" key="#com.intellij.codeInsight.editorActions.RestoreReferencesDialog" timestamp="1601652346793">
+      <screen x="-1920" y="98" width="1920" height="1040" />
     </state>
-    <state x="-1230" y="373" key="#com.intellij.codeInsight.editorActions.RestoreReferencesDialog/0.0.1920.1040/-1920.98.1920.1040@-1920.98.1920.1040" timestamp="1601390329065" />
+    <state x="-1230" y="373" key="#com.intellij.codeInsight.editorActions.RestoreReferencesDialog/0.0.1920.1040/-1920.98.1920.1040@-1920.98.1920.1040" timestamp="1601652346793" />
     <state x="690" y="275" key="#com.intellij.codeInsight.editorActions.RestoreReferencesDialog/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1601469727592" />
     <state x="690" y="275" key="#com.intellij.codeInsight.editorActions.RestoreReferencesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1601340829193" />
-    <state x="-1196" y="532" width="403" height="171" key="#com.intellij.framework.addSupport.AddSupportForSingleFrameworkDialog" timestamp="1601384599158">
-      <screen x="-1920" y="98" width="1920" height="1040" />
+    <state x="724" y="434" width="403" height="171" key="#com.intellij.framework.addSupport.AddSupportForSingleFrameworkDialog" timestamp="1601593619891">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="-1196" y="532" width="403" height="171" key="#com.intellij.framework.addSupport.AddSupportForSingleFrameworkDialog/0.0.1920.1040/-1920.98.1920.1040@-1920.98.1920.1040" timestamp="1601384599158" />
     <state x="724" y="434" width="403" height="171" key="#com.intellij.framework.addSupport.AddSupportForSingleFrameworkDialog/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1600548366558" />
-    <state x="-1155" y="311" key="#com.intellij.ide.util.MemberChooser" timestamp="1601483030952">
+    <state x="724" y="434" key="#com.intellij.framework.addSupport.AddSupportForSingleFrameworkDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1601593619891" />
+    <state x="-1155" y="311" key="#com.intellij.ide.util.MemberChooser" timestamp="1601651629129">
       <screen x="-1920" y="98" width="1920" height="1040" />
     </state>
-    <state x="-1155" y="311" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040/-1920.98.1920.1040@-1920.98.1920.1040" timestamp="1601483030952" />
+    <state x="-1155" y="311" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040/-1920.98.1920.1040@-1920.98.1920.1040" timestamp="1601651629129" />
     <state x="765" y="213" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1601469022254" />
     <state x="765" y="213" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1601423651724" />
     <state x="640" y="256" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1600205145318">
@@ -201,65 +529,65 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="887" y="37" key="#xdebugger.evaluate/0.0.1920.1040@0.0.1920.1040" timestamp="1600045310354" />
-    <state width="703" height="466" key="DebuggerActiveHint" timestamp="1601487140138">
-      <screen x="-1920" y="98" width="1920" height="1040" />
+    <state width="703" height="466" key="DebuggerActiveHint" timestamp="1601601120308">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="703" height="466" key="DebuggerActiveHint/0.0.1920.1040/-1920.98.1920.1040@-1920.98.1920.1040" timestamp="1601487140138" />
     <state width="703" height="466" key="DebuggerActiveHint/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1600206146705" />
-    <state width="703" height="466" key="DebuggerActiveHint/0.0.1920.1040@0.0.1920.1040" timestamp="1600045043072" />
+    <state width="703" height="466" key="DebuggerActiveHint/0.0.1920.1040@0.0.1920.1040" timestamp="1601601120308" />
     <state x="-1180" y="359" key="FileChooserDialogImpl" timestamp="1601041940490">
       <screen x="-1920" y="98" width="1920" height="1040" />
     </state>
     <state x="-1180" y="359" key="FileChooserDialogImpl/0.0.1920.1040/-1920.98.1920.1040@-1920.98.1920.1040" timestamp="1601041940490" />
     <state x="740" y="261" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1600910124048" />
-    <state width="1877" height="291" key="GridCell.Tab.0.bottom" timestamp="1601506920356">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1860" height="291" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1920.98.1920.1040@-1920.98.1920.1040" timestamp="1601493903655" />
-    <state width="1877" height="291" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1601497986063" />
-    <state width="1877" height="291" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1601506920356" />
-    <state width="1877" height="291" key="GridCell.Tab.0.center" timestamp="1601506920356">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1860" height="291" key="GridCell.Tab.0.center/0.0.1920.1040/-1920.98.1920.1040@-1920.98.1920.1040" timestamp="1601493903655" />
-    <state width="1877" height="291" key="GridCell.Tab.0.center/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1601497986063" />
-    <state width="1877" height="291" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1601506920356" />
-    <state width="1877" height="291" key="GridCell.Tab.0.left" timestamp="1601506920356">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1860" height="291" key="GridCell.Tab.0.left/0.0.1920.1040/-1920.98.1920.1040@-1920.98.1920.1040" timestamp="1601493903655" />
-    <state width="1877" height="291" key="GridCell.Tab.0.left/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1601497986063" />
-    <state width="1877" height="291" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1601506920356" />
-    <state width="1877" height="291" key="GridCell.Tab.0.right" timestamp="1601506920356">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1860" height="291" key="GridCell.Tab.0.right/0.0.1920.1040/-1920.98.1920.1040@-1920.98.1920.1040" timestamp="1601493903655" />
-    <state width="1877" height="291" key="GridCell.Tab.0.right/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1601497986063" />
-    <state width="1877" height="291" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1601506920356" />
-    <state width="1877" height="291" key="GridCell.Tab.1.bottom" timestamp="1601491935743">
+    <state width="618" height="636" key="GridCell.Tab.0.bottom" timestamp="1601909591772">
       <screen x="-1920" y="98" width="1920" height="1040" />
     </state>
-    <state width="1877" height="291" key="GridCell.Tab.1.bottom/0.0.1920.1040/-1920.98.1920.1040@-1920.98.1920.1040" timestamp="1601491935743" />
+    <state width="618" height="636" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1920.98.1920.1040@-1920.98.1920.1040" timestamp="1601909591772" />
+    <state width="1877" height="291" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1601586435745" />
+    <state width="618" height="621" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1601601523996" />
+    <state width="618" height="636" key="GridCell.Tab.0.center" timestamp="1601909591772">
+      <screen x="-1920" y="98" width="1920" height="1040" />
+    </state>
+    <state width="618" height="636" key="GridCell.Tab.0.center/0.0.1920.1040/-1920.98.1920.1040@-1920.98.1920.1040" timestamp="1601909591772" />
+    <state width="1877" height="291" key="GridCell.Tab.0.center/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1601586435745" />
+    <state width="618" height="621" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1601601523996" />
+    <state width="618" height="636" key="GridCell.Tab.0.left" timestamp="1601909591772">
+      <screen x="-1920" y="98" width="1920" height="1040" />
+    </state>
+    <state width="618" height="636" key="GridCell.Tab.0.left/0.0.1920.1040/-1920.98.1920.1040@-1920.98.1920.1040" timestamp="1601909591772" />
+    <state width="1877" height="291" key="GridCell.Tab.0.left/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1601586435745" />
+    <state width="618" height="621" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1601601523996" />
+    <state width="618" height="636" key="GridCell.Tab.0.right" timestamp="1601909591772">
+      <screen x="-1920" y="98" width="1920" height="1040" />
+    </state>
+    <state width="618" height="636" key="GridCell.Tab.0.right/0.0.1920.1040/-1920.98.1920.1040@-1920.98.1920.1040" timestamp="1601909591772" />
+    <state width="1877" height="291" key="GridCell.Tab.0.right/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1601586435745" />
+    <state width="618" height="621" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1601601523996" />
+    <state width="1877" height="291" key="GridCell.Tab.1.bottom" timestamp="1601660274285">
+      <screen x="-1920" y="98" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="291" key="GridCell.Tab.1.bottom/0.0.1920.1040/-1920.98.1920.1040@-1920.98.1920.1040" timestamp="1601660274285" />
     <state width="938" height="291" key="GridCell.Tab.1.bottom/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1601039024713" />
-    <state width="1877" height="291" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1601355595074" />
-    <state width="1877" height="291" key="GridCell.Tab.1.center" timestamp="1601491935743">
+    <state width="1877" height="291" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1601601463798" />
+    <state width="1877" height="291" key="GridCell.Tab.1.center" timestamp="1601660274285">
       <screen x="-1920" y="98" width="1920" height="1040" />
     </state>
-    <state width="1877" height="291" key="GridCell.Tab.1.center/0.0.1920.1040/-1920.98.1920.1040@-1920.98.1920.1040" timestamp="1601491935743" />
+    <state width="1877" height="291" key="GridCell.Tab.1.center/0.0.1920.1040/-1920.98.1920.1040@-1920.98.1920.1040" timestamp="1601660274285" />
     <state width="938" height="291" key="GridCell.Tab.1.center/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1601039024712" />
-    <state width="1877" height="291" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1601355595074" />
-    <state width="1877" height="291" key="GridCell.Tab.1.left" timestamp="1601491935743">
+    <state width="1877" height="291" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1601601463798" />
+    <state width="1877" height="291" key="GridCell.Tab.1.left" timestamp="1601660274285">
       <screen x="-1920" y="98" width="1920" height="1040" />
     </state>
-    <state width="1877" height="291" key="GridCell.Tab.1.left/0.0.1920.1040/-1920.98.1920.1040@-1920.98.1920.1040" timestamp="1601491935743" />
+    <state width="1877" height="291" key="GridCell.Tab.1.left/0.0.1920.1040/-1920.98.1920.1040@-1920.98.1920.1040" timestamp="1601660274285" />
     <state width="938" height="291" key="GridCell.Tab.1.left/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1601039024712" />
-    <state width="1877" height="291" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1601355595074" />
-    <state width="1877" height="291" key="GridCell.Tab.1.right" timestamp="1601491935743">
+    <state width="1877" height="291" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1601601463798" />
+    <state width="1877" height="291" key="GridCell.Tab.1.right" timestamp="1601660274285">
       <screen x="-1920" y="98" width="1920" height="1040" />
     </state>
-    <state width="1877" height="291" key="GridCell.Tab.1.right/0.0.1920.1040/-1920.98.1920.1040@-1920.98.1920.1040" timestamp="1601491935743" />
+    <state width="1877" height="291" key="GridCell.Tab.1.right/0.0.1920.1040/-1920.98.1920.1040@-1920.98.1920.1040" timestamp="1601660274285" />
     <state width="938" height="291" key="GridCell.Tab.1.right/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1601039024713" />
-    <state width="1877" height="291" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1601355595074" />
+    <state width="1877" height="291" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1601601463798" />
     <state x="-1480" y="192" key="SettingsEditor" timestamp="1601043182394">
       <screen x="-1920" y="98" width="1920" height="1040" />
     </state>
@@ -297,17 +625,21 @@
     <state x="-1304" y="338" key="run.anything.popup/0.0.1920.1040/-1920.98.1920.1040@-1920.98.1920.1040" timestamp="1600955108953" />
     <state x="616" y="240" key="run.anything.popup/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1599940440182" />
     <state x="616" y="240" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1600908585259" />
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1601423477501">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="-1297" y="323" width="672" height="678" key="search.everywhere.popup" timestamp="1601910108777">
+      <screen x="-1920" y="98" width="1920" height="1040" />
     </state>
-    <state x="-1297" y="323" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/-1920.98.1920.1040@-1920.98.1920.1040" timestamp="1601382040793" />
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1601327059683" />
+    <state x="-1297" y="323" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/-1920.98.1920.1040@-1920.98.1920.1040" timestamp="1601910108777" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1601577208410" />
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1601423477501" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
       <configuration name="Application">
         <watch expression="a" language="Scala" />
+        <watch expression="accessor(&quot;var1&quot;)" language="Scala" />
+        <watch expression="body.asJson" language="Scala" />
+        <watch expression="obj.isInvalid" />
+        <watch expression="errors.mkString(&quot;, &quot;)" />
       </configuration>
     </watches-manager>
   </component>

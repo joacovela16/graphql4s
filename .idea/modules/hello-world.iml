@@ -22,9 +22,9 @@
     <orderEntry type="library" name="sbt: dev.zio:izumi-reflect-thirdparty-boopickle-shaded_2.12:1.0.0-M5:jar" level="project" />
     <orderEntry type="library" name="sbt: dev.zio:izumi-reflect_2.12:1.0.0-M5:jar" level="project" />
     <orderEntry type="library" name="sbt: dev.zio:zio-query_2.12:0.2.4:jar" level="project" />
-    <orderEntry type="library" name="sbt: dev.zio:zio-stacktracer_2.12:1.0.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: dev.zio:zio-stacktracer_2.12:1.0.1:jar" level="project" />
     <orderEntry type="library" name="sbt: dev.zio:zio-streams_2.12:1.0.0:jar" level="project" />
-    <orderEntry type="library" name="sbt: dev.zio:zio_2.12:1.0.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: dev.zio:zio_2.12:1.0.1:jar" level="project" />
     <orderEntry type="library" name="sbt: io.circe:circe-core_2.12:0.13.0:jar" level="project" />
     <orderEntry type="library" name="sbt: io.circe:circe-generic_2.12:0.13.0:jar" level="project" />
     <orderEntry type="library" name="sbt: io.circe:circe-jawn_2.12:0.13.0:jar" level="project" />

@@ -42,6 +42,7 @@ trait StructTypeDerivation {
   implicit def f1Enc[A, OUT](implicit c: Commander[OUT], e: Encoder[A]): Commander[A => OUT] = createEncoderAsync[A => OUT] { f =>
     implicit ec =>
       new IFunction {
+
         override def argumentsLength: Int = 1
         override def invoke(args: Seq[String]): Future[Interpreter] = args match {
           case x +: Nil => e(x).map(f).flatMap(c.command)
