@@ -1,4 +1,0 @@
-[debug] "not up to date. inChanged = false, force = false
-[debug] Updating ProjectRef(uri("file:/D:/Proyectos/staff/scala-magnolia/project/"), "scala-magnolia-build")...
-[debug] Done updating ProjectRef(uri("file:/D:/Proyectos/staff/scala-magnolia/project/"), "scala-magnolia-build")
-[warn] There may be incompatibilities among your library dependencies; run 'evicted' to see detailed eviction warnings.
