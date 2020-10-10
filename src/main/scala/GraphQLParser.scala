@@ -1,15 +1,15 @@
 import fastparse.MultiLineWhitespace._
 import fastparse._
 import io.circe.{Json, JsonObject}
-import model.{Accessor, Commander, Interpreter, Link, SchemaDerive}
-import zio.stream.ZStream
+import model.{Accessor, Commander, IFail, Interpreter, Link}
+import zio.ZIO
 
-import scala.collection.mutable.ArrayBuffer
-import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.{ExecutionContext, Future}
 import scala.language.implicitConversions
 
-object GraphQLParser extends App {
+object GraphQLParser {
+
+  private final val MULTI_FIELD_CODE: String = "multi-fields"
 
   sealed trait Expr {
     def id: String
@@ -43,11 +43,11 @@ object GraphQLParser extends App {
 
   def aliasExpr[_: P]: P[Expr] = P(name ~ ":" ~ funcExpr).map { case (x, y) => Alias(x, y) }
 
-  def fragmentExpr[_: P]: P[FragmentDef] = P("fragment" ~ name ~ "{" ~ bodyExpr ~ "}").map { case (id, body) => FragmentDef(id, body) }
+  def fragmentExpr[_: P]: P[FragmentDef] = P("fragment" ~/ name ~/ "{" ~/ bodyExpr ~/ "}").map { case (id, body) => FragmentDef(id, body) }
 
-  def objExpr[_: P]: P[Expr] = P(name ~ "{" ~ bodyExpr ~ "}").map { case (str, body) => ObjExtractor(str, body) }
+  def objExpr[_: P]: P[Expr] = P(name ~ "{" ~/ bodyExpr ~/ "}").map { case (str, body) => ObjExtractor(str, body) }
 
-  def funcExpr[_: P]: P[FunctionExtractor] = P(name ~ "(" ~/ args ~/ ")" ~ ("{" ~ bodyExpr.? ~ "}").?).map { case (n, args, body) => FunctionExtractor(n, args.toList, body.flatten.getOrElse(Nil)) }
+  def funcExpr[_: P]: P[FunctionExtractor] = P(name ~ "(" ~/ args ~/ ")" ~ ("{" ~/ bodyExpr.? ~/ "}").?).map { case (n, args, body) => FunctionExtractor(n, args.toList, body.flatten.getOrElse(Nil)) }
 
   def bodyExpr[_: P]: P[List[Expr]] = P((fragmentExpr | aliasExpr | objExpr | funcExpr | fragmentIdExpr | fieldExp) ~ bodyExpr.?).map { case (expr, maybeExpr) =>
     maybeExpr match {
@@ -60,7 +60,7 @@ object GraphQLParser extends App {
 
   def start[_: P]: P[List[Expr]] = P("{" ~ bodyExpr ~ "}")
 
-  def eval(interpreter: Interpreter, accessor: model.Accessor, expr: List[Expr])(implicit ec: ExecutionContext): Future[Interpreter] = {
+  def eval(interpreter: Interpreter, accessor: model.Accessor, expr: List[Expr], renderer: model.Renderer)(implicit ec: ExecutionContext): zio.Task[Option[String]] = {
 
     val (fragmentDefInit, others) = expr.partition(_.isInstanceOf[FragmentDef])
     val fragmentDef: Map[String, FragmentDef] = fragmentDefInit.collect { case x: FragmentDef => x }.map(x => x.id -> x).toMap
@@ -69,7 +69,8 @@ object GraphQLParser extends App {
 
     implicit def asOption[T](d: T): Option[T] = Some(d)
 
-    def invokeFunction(f: FunctionExtractor, i: Interpreter, fragments: Map[String, FragmentDef], accessor: Accessor): Future[Interpreter] = {
+    def invokeFunction(f: FunctionExtractor, i: Interpreter, fragments: Map[String, FragmentDef], accessor: Accessor): zio.Task[Option[String]] = {
+
       val argsMat: Seq[String] = f.args.collect {
         case LiteralValue(value, _) => Some(value)
         case ValueRef(id) => accessor(id)
@@ -81,27 +82,39 @@ object GraphQLParser extends App {
           case Some(value) =>
             val body: List[Expr] = f.body
             if (body.isEmpty) {
-              value
+              value.flatMap(x => projector(x, Nil, accessor, fragments))
             } else {
               value.flatMap(i => projector(i, body, accessor, fragments))
             }
-          case None => Future.failed(new RuntimeException(s"Problem trying to resolve ${f.id}"))
+          case None =>
+
+            renderer.addIssue("invoke-error", s"Problem trying to resolve ${f.id}")
+            zio.Task.none
         }
       } else {
-        Future.failed(new RuntimeException(s"Variable missing in ${f.id}"))
+        renderer.addIssue("missing-argument", s"Variable missing in ${f.id}")
+        zio.Task.none
       }
     }
 
-    def projector(interpreter: Interpreter, exprs: List[Expr], accessor: model.Accessor, fragments: Map[String, FragmentDef]): Future[Interpreter] =
+    def projector(interpreter: Interpreter, exprs: List[Expr], accessor: model.Accessor, fragments: Map[String, FragmentDef]): zio.Task[Option[String]] =
       interpreter match {
-        case x: model.IString => x
-        case x: model.INumber => x
-        case x: model.IError => x
-        case x: model.IArray => Future.sequence(x.items.map(x => projector(x, exprs, accessor, fragments))).map(model.IArray)
-        case x: model.IOption => x.value.map(y => projector(y, exprs, accessor, fragments)).getOrElse(x)
+        case x: model.IAtomic =>
+          zio.Task.succeed(renderer.atomicRender(x))
+
+        case x: model.IArray =>
+
+          x.items.mapM(y => projector(y, exprs, accessor, fragments)).runCollect.map { y => Some(renderer.itemsRender(y.flatMap(z => z))) }
+
+        case x: model.IOption =>
+
+          x.value match {
+            case Some(value) => projector(value, exprs, accessor, fragments)
+            case None => zio.Task.succeed(None)
+          }
         case x: model.IObject =>
 
-          val bodyXs = exprs
+          val bodyXs: List[Expr] = exprs
             .flatMap {
               case FragmentRef(id) =>
                 fragments.get(id) match {
@@ -112,18 +125,22 @@ object GraphQLParser extends App {
               case x => List(x)
             }
 
-          if (bodyXs.map(_.id).toSet .size == bodyXs.size) {
+          if (bodyXs.map(_.id).toSet.size == bodyXs.size) {
 
-            val xs: Seq[Future[(String, Interpreter)]] = bodyXs
+
+            val xs: Seq[zio.Task[(String, Option[String])]] = bodyXs
               .flatMap {
                 case ext: FunctionExtractor =>
                   val outName: String = ext.id
 
-                  if (ext.isInvalid) {
-                    Some(Future.successful((outName, model.IError(s"""Multiple field in "$outName""""))))
-                  } else {
-                    x.getField(outName).map { interp =>
-                      invokeFunction(ext, interp, fragments, accessor).map(y => (outName, y))
+                  {
+                    if (ext.isInvalid) {
+                      renderer.addIssue(MULTI_FIELD_CODE, s"""Multiple field in "$outName"""")
+                      None
+                    } else {
+                      x.getField(outName).map { interp =>
+                        invokeFunction(ext, interp, fragments, accessor).map(y => (outName, y))
+                      }
                     }
                   }
                 case obj: ObjExtractor =>
@@ -131,20 +148,15 @@ object GraphQLParser extends App {
                   val name: String = obj.id
 
                   if (obj.isInvalid) {
-                    Some(Future.successful((name, model.IError(s"""Multiple field "$name""""))))
+                    renderer.addIssue(MULTI_FIELD_CODE, s"""Multiple field in "$name"""")
+                    None
                   } else {
                     val body: List[Expr] = obj.body
-                    if (body.isEmpty) {
-                      x.getField(name).map(x => Future.successful((name, x)))
-                    } else {
-                      x.getField(name).map { int =>
-                        projector(int, body, accessor, fragments).map(r => (name, r))
-                      }
-                    }
+                    x.getField(name).map(int => projector(int, body, accessor, fragments).map(r => (name, r)))
                   }
-
                 case Alias(out, body) =>
-                  x.getField(body.id).flatMap(int => invokeFunction(body, int, fragments, accessor).map(i => (out, i)))
+
+                  x.getField(body.id).map(int => invokeFunction(body, int, fragments, accessor).map(i => (out, i)))
 
                 case _ =>
                   println("Uppp!!!")
@@ -152,35 +164,38 @@ object GraphQLParser extends App {
                   None
               }
 
-            Future.sequence(xs).flatMap { ys =>
-              model.IObject(x.name, ys)
-            }
-          }else{
-            Future.successful( model.IError(s"""Multiple fields in "${x.name}""""))
+            zio.IO.collectAll(xs)
+              .map { ys =>
+                renderer.objectRender(
+                  x.name,
+                  ys.flatMap { case (str, maybeString) => maybeString.map(z => (str, z)) }
+                )
+              }
+          } else {
+            renderer.addIssue(MULTI_FIELD_CODE, s"""Multiple fields in "${x.name}"""")
+            zio.Task.none
           }
-        case _ => Future.failed(new RuntimeException("Unsupported"))
+        case _ => zio.Task.fail(new RuntimeException("Unsupported"))
       }
 
     projector(interpreter, others, accessor, fragmentDef)
   }
 
-  def interpreter[T](schema: T)(implicit link: Link, ec: ExecutionContext, commander: Commander[T], render: model.Render = model.JsonRender): (Map[String, String], Option[String]) => Future[String] = {
-    val interpreter: Future[Interpreter] = commander.command(schema)
+  def interpreter[T](schema: T)(implicit link: Link, ec: ExecutionContext, commander: Commander[T], r: model.Renderer): (Map[String, String], Option[String]) => zio.Task[Option[String]] = {
+    val interpreter: zio.Task[Interpreter] = commander.command(schema)
 
     (queryParams: Map[String, String], body: Option[String]) => {
 
       interpreter.flatMap { inter =>
 
-        link.build(queryParams, body).flatMap { accessor =>
-          accessor.query.flatMap { q =>
+        zio.ZIO.fromFuture(_ => link.build(queryParams, body)).flatMap { accessor =>
+          zio.ZIO.fromFuture(_ => accessor.query).flatMap { q =>
 
             parse(q, start(_)) match {
               case Parsed.Success(value, _) =>
-                println(value)
 
-                eval(inter, accessor, value).map(render.process)
-
-              case failure: Parsed.Failure => Future.failed(new RuntimeException(failure.toString()))
+                eval(inter, accessor, value, r)
+              case failure: Parsed.Failure => zio.Task.fail(new RuntimeException(failure.toString()))
             }
           }
         }
@@ -223,7 +238,6 @@ object GraphQLParser extends App {
     "query" ->
       """|{
          | height(10){
-         |  x
          |  ...template
          |  sum(15)
          |  alias: sum(15)
@@ -242,13 +256,15 @@ object GraphQLParser extends App {
         |""".stripMargin
   )
 
-  import scala.concurrent.ExecutionContext.Implicits.global
+  def main(args: Array[String]): Unit = {
+    import scala.concurrent.ExecutionContext.Implicits.global
 
+    implicit val renderer: model.Renderer = model.JsonRenderer
 
-  val int = interpreter(instance)
-  val r = Await.result(
-    int(query, None),
-    Duration.Inf
-  )
-  println(r)
+    val int = interpreter(instance)
+    val start = System.currentTimeMillis()
+    val r = int(query, None)
+    println(zio.Runtime.default.unsafeRun(r))
+    println((System.currentTimeMillis() - start)*0.001)
+  }
 }

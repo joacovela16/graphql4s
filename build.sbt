@@ -1,7 +1,7 @@
 
 // The simplest possible sbt build file is just one line:
 
-scalaVersion := "2.12.11"
+scalaVersion := "2.12.12"
 // That is, to create a valid sbt build, all you've got to do is define the
 // version of Scala you'd like your project to use.
 
@@ -13,7 +13,7 @@ scalaVersion := "2.12.11"
 
 // It's possible to define many kinds of settings, such as:
 
-name := "hello-world"
+name := "scala-magnolia"
 organization := "ch.epfl.scala"
 version := "1.0"
 
@@ -87,3 +87,4 @@ libraryDependencies += "io.circe" %% "circe-generic" % "0.13.0"
 libraryDependencies += "io.circe" %% "circe-core" % "0.13.0"
 libraryDependencies += "com.github.nikita-volkov" % "sext" % "0.2.4"
 libraryDependencies += "dev.zio" %% "zio" % "1.0.1"
+libraryDependencies += "io.monix" %% "monix" % "3.2.2"

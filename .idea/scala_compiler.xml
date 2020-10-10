@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ScalaCompilerConfiguration">
-    <profile name="sbt 1" modules="scala-magnolia_4773">
-      <option name="dynamics" value="true" />
-    </profile>
-    <profile name="sbt 2" modules="hello-world" />
+    <profile name="sbt 1" modules="scala-magnolia,scala-magnolia_2290" />
   </component>
 </project>

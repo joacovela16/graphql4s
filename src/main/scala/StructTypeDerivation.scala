@@ -10,10 +10,20 @@ trait StructTypeDerivation {
   type Typeclass[T] = Commander[T]
 
   def combine[T](ctx: CaseClass[Commander, T]): Commander[T] = new Commander[T] {
-    override def command(d: T)(implicit executionContext: ExecutionContext): Future[Interpreter] = {
-      Future.sequence(
-        ctx.parameters.map(y => y.typeclass.command( y.default.getOrElse( y.dereference(d))).map(x => (y.label, x)))
-      ).map(x => IObject(ctx.typeName.short, x))
+    override def command(d: T)(implicit executionContext: ExecutionContext): zio.Task[Interpreter] = {
+
+      val short: String = ctx.typeName.short
+
+      zio.stream.Stream.fromIterable(
+        ctx.parameters.map { x =>
+          x.typeclass.command {
+            x.default.getOrElse(x.dereference(d))
+          }.map(y => IField(x.label, y, short))
+        }
+      )
+        .mapM(identity)
+        .runCollect
+        .map(xs => model.IObject(short, xs))
     }
   }
 
@@ -30,12 +40,17 @@ trait StructTypeDerivation {
   implicit val doubleEnc: model.Commander[Double] = createCommander[Double](INumber)
 
   implicit def iterableEnc[A, C[x] <: Iterable[x]](implicit e: Commander[A]): Commander[C[A]] = new Commander[C[A]] {
-    override def command(d: C[A])(implicit executionContext: ExecutionContext): Future[Interpreter] = Future.sequence(d.map(e.command)).map(IArray)
+    override def command(d: C[A])(implicit executionContext: ExecutionContext): zio.Task[Interpreter] = {
+      //      zio.stream.Stream.fromIterable(d).mapM(e.command).run(zio.stream.Sink.collectAll).map(xs => model.IArray(xs))
+      zio.Task(model.IArray(zio.stream.Stream.fromIterable(d).mapM(e.command)))
+    }
   }
 
   implicit def futureEnc[T](implicit e: Commander[T]): Commander[Future[T]] = {
     new Commander[Future[T]] {
-      override def command(d: Future[T])(implicit executionContext: ExecutionContext): Future[Interpreter] = d.flatMap(e.command)
+      override def command(d: Future[T])(implicit executionContext: ExecutionContext): zio.Task[Interpreter] = {
+        zio.ZIO.fromFuture(_ => d).flatMap(e.command)
+      }
     }
   }
 
@@ -44,9 +59,10 @@ trait StructTypeDerivation {
       new IFunction {
 
         override def argumentsLength: Int = 1
-        override def invoke(args: Seq[String]): Future[Interpreter] = args match {
-          case x +: Nil => e(x).map(f).flatMap(c.command)
-          case _ => Future.failed("Calling error")
+
+        override def invoke(args: Seq[String]): zio.Task[Interpreter] = args match {
+          case x +: Nil => zio.Task.fromFuture(_ => e(x)).map(f).flatMap(c.command)
+          case _ => zio.Task.fail(new RuntimeException("Calling error"))
         }
       }
   }
