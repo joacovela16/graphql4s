@@ -1,5 +1,7 @@
 import magnolia._
 import model._
+import monix.eval.Task
+import monix.reactive.Observable
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.experimental.macros
@@ -10,20 +12,17 @@ trait StructTypeDerivation {
   type Typeclass[T] = Commander[T]
 
   def combine[T](ctx: CaseClass[Commander, T]): Commander[T] = new Commander[T] {
-    override def command(d: T)(implicit executionContext: ExecutionContext): zio.Task[Interpreter] = {
+    override def command(d: T)(implicit executionContext: ExecutionContext): Task[Interpreter] = {
 
       val short: String = ctx.typeName.short
 
-      zio.stream.Stream.fromIterable(
-        ctx.parameters.map { x =>
-          x.typeclass.command {
-            x.default.getOrElse(x.dereference(d))
-          }.map(y => IField(x.label, y, short))
-        }
-      )
-        .mapM(identity)
-        .runCollect
-        .map(xs => model.IObject(short, xs))
+      val xs: Seq[Task[IField]] = ctx.parameters.map { x =>
+        x.typeclass.command {
+          x.default.getOrElse(x.dereference(d))
+        }.map(y => IField(x.label, y, short))
+      }
+
+      Task.parSequence(xs).map { ys => model.IObject(short, ys) }
     }
   }
 
@@ -40,16 +39,20 @@ trait StructTypeDerivation {
   implicit val doubleEnc: model.Commander[Double] = createCommander[Double](INumber)
 
   implicit def iterableEnc[A, C[x] <: Iterable[x]](implicit e: Commander[A]): Commander[C[A]] = new Commander[C[A]] {
-    override def command(d: C[A])(implicit executionContext: ExecutionContext): zio.Task[Interpreter] = {
-      //      zio.stream.Stream.fromIterable(d).mapM(e.command).run(zio.stream.Sink.collectAll).map(xs => model.IArray(xs))
-      zio.Task(model.IArray(zio.stream.Stream.fromIterable(d).mapM(e.command)))
-    }
+    override def command(d: C[A])(implicit executionContext: ExecutionContext): Task[Interpreter] =
+
+      Task.pure(
+        model.IArray(Observable
+          .fromIterable(d)
+          .mapEval(e.command)
+        )
+      )
   }
 
   implicit def futureEnc[T](implicit e: Commander[T]): Commander[Future[T]] = {
     new Commander[Future[T]] {
-      override def command(d: Future[T])(implicit executionContext: ExecutionContext): zio.Task[Interpreter] = {
-        zio.ZIO.fromFuture(_ => d).flatMap(e.command)
+      override def command(d: Future[T])(implicit executionContext: ExecutionContext): Task[Interpreter] = {
+        Task.fromFuture(d).flatMap(e.command)
       }
     }
   }
@@ -60,9 +63,9 @@ trait StructTypeDerivation {
 
         override def argumentsLength: Int = 1
 
-        override def invoke(args: Seq[String]): zio.Task[Interpreter] = args match {
-          case x +: Nil => zio.Task.fromFuture(_ => e(x)).map(f).flatMap(c.command)
-          case _ => zio.Task.fail(new RuntimeException("Calling error"))
+        override def invoke(args: Seq[String]): Task[Interpreter] = args match {
+          case x +: Nil => Task.fromFuture(e(x)).map(f).flatMap(c.command)
+          case _ => Task.raiseError(new RuntimeException("Calling error"))
         }
       }
   }

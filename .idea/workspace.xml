@@ -3,12 +3,23 @@
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="002ce8ea-a2f3-4e99-bde2-875da73931d2" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/scala/GraphQL.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/scala/Parser.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/scala/defaults/Defaults.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.sbt" beforeDir="false" afterPath="$PROJECT_DIR$/build.sbt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/build.properties" beforeDir="false" afterPath="$PROJECT_DIR$/project/build.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/metals.sbt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/GraphQLParser.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GraphQLParser.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/GraphQLParser.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/Main.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Main.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/StructTypeDerivation.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/StructTypeDerivation.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/model/package.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/model/package.scala" afterDir="false" />
     </list>
@@ -31,6 +42,10 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.scala" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.scala" root0="SKIP_HIGHLIGHTING" />
+  </component>
   <component name="JupyterTrust" id="a634a1d0-73e3-46cc-9901-d238dd4bb149" />
   <component name="ProjectCodeStyleSettingsMigration">
     <option name="version" value="1" />
@@ -45,30 +60,33 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="settings.editor.selected.configurable" value="sbt.project.settings.configurable" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Scala" />
   </component>
   <component name="RunManager">
-    <configuration name="GraphQLParser" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="GraphQLParser" />
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="scala-magnolia" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.GraphQLParser" />
+        <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
   </component>
@@ -82,45 +100,110 @@
       <updated>1602092584098</updated>
       <workItem from="1602092586482" duration="4293000" />
       <workItem from="1602099003015" duration="6579000" />
-      <workItem from="1602337034512" duration="4725000" />
+      <workItem from="1602337034512" duration="14867000" />
+      <workItem from="1602450193516" duration="8572000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
   <component name="WindowStateProjectService">
-    <state x="765" y="213" key="#com.intellij.ide.util.MemberChooser" timestamp="1602348991914">
+    <state x="690" y="275" key="#com.intellij.codeInsight.editorActions.RestoreReferencesDialog" timestamp="1602357271526">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="765" y="213" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1602348991914" />
-    <state width="1877" height="291" key="GridCell.Tab.0.bottom" timestamp="1602350175914">
+    <state x="690" y="275" key="#com.intellij.codeInsight.editorActions.RestoreReferencesDialog/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1602357271526" />
+    <state x="724" y="434" key="#com.intellij.framework.addSupport.AddSupportForSingleFrameworkDialog" timestamp="1602450203740">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="291" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1602350175914" />
-    <state width="1877" height="291" key="GridCell.Tab.0.center" timestamp="1602350175914">
+    <state x="724" y="434" key="#com.intellij.framework.addSupport.AddSupportForSingleFrameworkDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1602450203740" />
+    <state x="765" y="213" key="#com.intellij.ide.util.MemberChooser" timestamp="1602455966118">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="291" key="GridCell.Tab.0.center/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1602350175914" />
-    <state width="1877" height="291" key="GridCell.Tab.0.left" timestamp="1602350175914">
+    <state x="765" y="213" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1602356110850" />
+    <state x="765" y="213" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1602455966118" />
+    <state width="416" height="466" key="DebuggerActiveHint" timestamp="1602457536640">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="291" key="GridCell.Tab.0.left/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1602350175914" />
-    <state width="1877" height="291" key="GridCell.Tab.0.right" timestamp="1602350175914">
+    <state width="416" height="466" key="DebuggerActiveHint/0.0.1920.1040@0.0.1920.1040" timestamp="1602457536640" />
+    <state width="1877" height="291" key="GridCell.Tab.0.bottom" timestamp="1602459615042">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="291" key="GridCell.Tab.0.right/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1602350175914" />
-    <state x="-1459" y="263" key="SettingsEditor" timestamp="1602092607540">
-      <screen x="-1920" y="98" width="1920" height="1040" />
+    <state width="1877" height="291" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1602353253785" />
+    <state width="1877" height="291" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1602459615042" />
+    <state width="1877" height="291" key="GridCell.Tab.0.center" timestamp="1602459615042">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="291" key="GridCell.Tab.0.center/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1602353253785" />
+    <state width="1877" height="291" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1602459615042" />
+    <state width="1877" height="291" key="GridCell.Tab.0.left" timestamp="1602459615042">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="291" key="GridCell.Tab.0.left/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1602353253785" />
+    <state width="1877" height="291" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1602459615042" />
+    <state width="1877" height="291" key="GridCell.Tab.0.right" timestamp="1602459615042">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="291" key="GridCell.Tab.0.right/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1602353253785" />
+    <state width="1877" height="291" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1602459615042" />
+    <state width="1877" height="291" key="GridCell.Tab.1.bottom" timestamp="1602457652099">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="291" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1602457652099" />
+    <state width="1877" height="291" key="GridCell.Tab.1.center" timestamp="1602457652099">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="291" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1602457652099" />
+    <state width="1877" height="291" key="GridCell.Tab.1.left" timestamp="1602457652099">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="291" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1602457652099" />
+    <state width="1877" height="291" key="GridCell.Tab.1.right" timestamp="1602457652099">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="291" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1602457652099" />
+    <state x="461" y="165" key="SettingsEditor" timestamp="1602356234710">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="-1459" y="263" key="SettingsEditor/0.0.1920.1040/-1920.98.1920.1040@-1920.98.1920.1040" timestamp="1602092607540" />
+    <state x="461" y="165" key="SettingsEditor/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1602356234710" />
+    <state width="498" height="446" key="SwitcherDM" timestamp="1602356682675">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="498" height="446" key="SwitcherDM/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1602356682675" />
     <state x="777" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1602337146910">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="777" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1602337146910" />
-    <state width="602" height="138" key="javadoc.popup.new" timestamp="1602338960855">
+    <state width="602" height="138" key="javadoc.popup.new" timestamp="1602458080573">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="602" height="138" key="javadoc.popup.new/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1602338960855" />
+    <state width="602" height="138" key="javadoc.popup.new/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1602357911140" />
+    <state width="602" height="138" key="javadoc.popup.new/0.0.1920.1040@0.0.1920.1040" timestamp="1602458080573" />
+    <state x="664" y="250" key="refactoring.ChangeSignatureDialog" timestamp="1602456389199">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="664" y="250" key="refactoring.ChangeSignatureDialog/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1602356924321" />
+    <state x="664" y="250" key="refactoring.ChangeSignatureDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1602456389199" />
+    <state x="616" y="240" key="run.anything.popup" timestamp="1602357011926">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="616" y="240" key="run.anything.popup/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1602357011926" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1602357588609">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/-1920.98.1920.1040@0.0.1920.1040" timestamp="1602357588609" />
   </component>
 </project>
