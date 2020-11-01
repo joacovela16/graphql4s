@@ -15,7 +15,6 @@ object Main extends EncoderTypeDerivation with StructTypeDerivation {
 
   case class Human(name: String, current: CurrentLocation, height: Int => Location, list: List[Location])
 
-
   def main(args: Array[String]): Unit = {
 
     val query: Map[String, String] = Map(
@@ -23,12 +22,13 @@ object Main extends EncoderTypeDerivation with StructTypeDerivation {
         """|{
            | name
            | current
-           | height(10){
-           |  y
-           |  ...template
-           | }
-           | fragment template{
+           | list{
            |  x
+           |  sum(2)
+           | }
+           | ...template
+           | fragment template{
+           |  height(50)
            | }
            |}
            |""".stripMargin,
@@ -42,15 +42,19 @@ object Main extends EncoderTypeDerivation with StructTypeDerivation {
 
     import monix.execution.Scheduler.Implicits.global
 
-    val instance: Human = Human("joaquin", CurrentLocation("mdeo"), x => {
-      Location(10, 10 + 1)
-    }, List(Location(1, 2), Location(3, 4)))
+    val instance: Human = Human(
+      "joaquin",
+      CurrentLocation("mdeo"),
+      x => Location(x, x + 1),
+      List(Location(1, 2), Location(3, 4))
+    )
 
 
-    val start = System.currentTimeMillis()
-    val r: Task[String] = GraphQL.buildInterpreter(instance).flatMap(int => int(query, None))
+    val intPromise: (Map[String, String], Option[String]) => Task[Option[String]] = GraphQL.buildInterpreter(instance)
+
+    val r: Task[Option[String]] = intPromise(query, None)
     println(Await.result(r.executeAsync.runToFuture, Duration.Inf))
-    println((System.currentTimeMillis() - start) * 0.001)
+
 
   }
 }

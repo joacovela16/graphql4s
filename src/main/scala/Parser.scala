@@ -56,11 +56,11 @@ object Parser {
 
   private def aliasExpr[_: P]: P[Expr] = P(name ~ ":" ~ funcExpr).map { case (x, y) => Alias(x, y) }
 
-  private def fragmentExpr[_: P]: P[FragmentDef] = P("fragment" ~/ name ~/ "{" ~/ bodyExpr ~/ "}").map { case (id, body) => FragmentDef(id, body) }
+  private def fragmentExpr[_: P]: P[FragmentDef] = P("fragment" ~ name ~ "{" ~ bodyExpr ~ "}").map { case (id, body) => FragmentDef(id, body) }
 
-  private def objExpr[_: P]: P[Expr] = P(name ~ "{" ~/ bodyExpr ~/ "}").map { case (str, body) => ObjExtractor(str, body) }
+  private def objExpr[_: P]: P[Expr] = P(name ~ "{" ~ bodyExpr.? ~ "}").map { case (str, body) => ObjExtractor(str, body.getOrElse(Nil)) }
 
-  private def funcExpr[_: P]: P[FunctionExtractor] = P(name ~ "(" ~/ args ~/ ")" ~ ("{" ~/ bodyExpr.? ~/ "}").?).map { case (n, args, body) => FunctionExtractor(n, args.toList, body.flatten.getOrElse(Nil)) }
+  private def funcExpr[_: P]: P[FunctionExtractor] = P(name ~ "(" ~ args ~ ")" ~ ("{" ~ bodyExpr.? ~ "}").?).map { case (n, args, body) => FunctionExtractor(n, args.toList, body.flatten.getOrElse(Nil)) }
 
   private def bodyExpr[_: P]: P[List[Expr]] = P((fragmentExpr | aliasExpr | objExpr | funcExpr | fragmentIdExpr | fieldExp) ~ bodyExpr.?).map { case (expr, maybeExpr) =>
     maybeExpr match {

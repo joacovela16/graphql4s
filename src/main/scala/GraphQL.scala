@@ -1,148 +1,159 @@
-import Parser.{Alias, Expr, FragmentDef, FragmentRef, FunctionExtractor, LiteralValue, ObjExtractor, ValueRef, start}
+import java.io.{ByteArrayOutputStream, PrintWriter}
+import java.nio.ByteBuffer
+
+import Parser._
+import com.sun.org.apache.xalan.internal.xsltc.runtime.output.StringOutputBuffer
 import defaults.Defaults
-import fastparse.{Parsed, parse}
-import model.{Accessor, Commander, Interpreter, Link}
+import model.{Accessor, IBuild, Link, Value}
 import monix.eval.Task
 import monix.reactive.Observable
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
+import scala.language.implicitConversions
 
 object GraphQL {
 
+
+  private type COMPUTE = Task[Option[String]]
+
+  private final val NONE: COMPUTE = Task.pure(None)
+
   private final val MULTI_FIELD_CODE: String = "multi-fields"
 
-  private def invokeFunction(i: Interpreter, f: FunctionExtractor, fragments: Map[String, FragmentDef], accessor: Accessor, renderer: model.Renderer): Observable[String] = {
+  private implicit def toOption[A](d: A): Option[A] = Some(d)
+
+  private implicit def asRuntimeException(d: String): RuntimeException = new RuntimeException(d)
+
+  private case class Context(fragments: Map[String, FragmentDef], accessor: Accessor, renderer: model.Renderer)
+
+  private def invokeFunction(i: Value, f: FunctionExtractor, context: Context): COMPUTE = {
 
     val argsMat: Seq[String] = f.args.collect {
       case LiteralValue(value, _) => Some(value)
-      case ValueRef(id) => accessor(id)
+      case ValueRef(id) => context.accessor(id)
     }.flatten
 
-    if (argsMat.length == f.args.length) {
-
-      i.call(argsMat) match {
-        case Some(value) =>
-          val body: List[Expr] = f.body
-          val obs = Observable.fromTask(value)
-          obs.flatMap(int => projector(int, body, accessor, fragments, renderer))
-        case None =>
-
-          renderer.onError("invoke-error", s"Problem trying to resolve ${f.id}")
-          Observable.empty[String]
-      }
-    } else {
-      renderer.onError("missing-argument", s"Variable missing in ${f.id}")
-      Observable.empty[String]
+    i.call(argsMat) match {
+      case Some(value) =>
+        val body: List[Expr] = f.body
+        value.flatMap(int => projector(int, body, context))
+      case None =>
+        context.renderer.onError("error", "invoke-error", s"Problem trying to resolve ${f.id}")
+        NONE
     }
   }
 
-  private def projector(interpreterTask: Interpreter, exprs: List[Expr], accessor: model.Accessor, fragments: Map[String, FragmentDef], renderer: model.Renderer): Observable[String] = interpreterTask match {
+  private def projector(value: Value, expr: Iterable[Expr], context: Context): COMPUTE = {
+    val renderer = context.renderer
+    value match {
+      case atomic: model.IAtomic => Task.pure(renderer.onAtomic(atomic))
+      case model.IAsync(data) => data.flatMap(x => projector(x, expr, context))
+      case model.IArray(data) =>
+        data
+          .mapEval(x => projector(x, expr, context))
+          .collect { case Some(value) => value }
+          .intersperse(renderer.itemStart, renderer.itemSeparator, renderer.itemEnd)
+          .foldLeftL("")(_ + _)
+          .map(Some(_))
 
-    case x: model.IAtomic =>
+      case model.IOption(value) => value.fold(NONE)(x => projector(x, expr, context))
 
-      Observable(renderer.onAtomic(x))
+      case obj: model.IObject =>
 
-    case x: model.IArray =>
-      x.items.flatMap(int => projector(int, exprs, accessor, fragments, renderer)).intersperse(renderer.itemStart, renderer.itemSeparator, renderer.itemEnd)
-    case x: model.IOption =>
+        if (expr.isEmpty) {
 
-      x.value.fold(Observable.empty[String])(v => projector(v, exprs, accessor, fragments, renderer))
 
-    case x: model.IObject =>
-
-      val objectExtractors: List[Expr] = exprs
-        .flatMap {
-          case FragmentRef(id) =>
-            fragments.get(id) match {
-              case Some(value) => value.body
-              case None => Nil
-            }
-          case x => List(x)
-        }
-
-      if (objectExtractors.map(_.id).toSet.size == objectExtractors.size) {
-
-        if (objectExtractors.isEmpty) {
-          Observable.empty
-        } else {
 
           Observable
-            .fromIterable(objectExtractors)
-            .flatMap {
-              case ext: FunctionExtractor =>
-                val outName: String = ext.id
-                if (ext.isInvalid) {
-                  renderer.onError(MULTI_FIELD_CODE, s"""Multiple field in "$outName"""")
-                  Observable.empty[String]
-                } else {
-                  x.getField(outName)
-                    .fold(Observable.empty[String]) { inter => invokeFunction(inter, ext, fragments, accessor, renderer).map(r => renderer.onObjectField(outName, r)) }
-                }
-
-              case obj: ObjExtractor =>
-                val name: String = obj.id
-
-                if (obj.isInvalid) {
-                  renderer.onError(MULTI_FIELD_CODE, s"""Multiple field in "$name"""")
-                  Observable.empty[String]
-                } else {
-                  x.getField(name).fold(Observable.empty[String]) { int =>
-                    projector(int, obj.body, accessor, fragments, renderer).map(r => renderer.onObjectField(name, r))
-                  }
-                }
-              case Alias(out, functionExt) =>
-
-                x.getField(functionExt.id).fold(Observable.empty[String]) { int =>
-                  invokeFunction(int, functionExt, fragments, accessor, renderer).map(r => renderer.onObjectField(out, r))
-                }
-
-              case _ =>
-
-                println("upps!")
-                Observable.empty[String]
+            .fromIterable(obj.fields)
+            .mapEval { case (fieldName, value) =>
+              projector(value, Nil, context).map(r => r.map(y => renderer.onObjectField(fieldName, y)))
             }
-            .intersperse(renderer.onStartObject(x.name), renderer.objectSeparator, renderer.onEndObject(x.name))
-            .foldLeft("")(_ + _)
+            .collect { case Some(value) => value }
+            .intersperse(renderer.onStartObject, renderer.objectSeparator, renderer.onEndObject)
+            .foldLeftL("")(_ + _)
+            .map(Some(_))
+
+        } else {
+          Observable
+            .fromIterable(expr)
+            .flatMapIterable {
+              case FragmentRef(id) =>
+                context.fragments.get(id).fold(List.empty[Expr])(_.body)
+              case x => List(x)
+            }
+            .mapEval {
+              case func: FunctionExtractor =>
+
+                obj.getField(func.id)
+                  .fold(NONE)(value => invokeFunction(value, func, context))
+                  .map(r => r.map(y => renderer.onObjectField(func.id, y)))
+
+              case ObjExtractor(id, body) =>
+
+                obj
+                  .getField(id)
+                  .fold(NONE)(value => projector(value, body, context))
+                  .map(r => r.map(v => renderer.onObjectField(id, v)))
+
+              case Alias(id, body) =>
+
+                obj
+                  .getField(body.id)
+                  .fold(NONE)(value => invokeFunction(value, body, context))
+                  .map(r => r.map(v => renderer.onObjectField(id, v)))
+            }
+            .collect { case Some(value) => value }
+            .intersperse(renderer.onStartObject, renderer.objectSeparator, renderer.onEndObject)
+            .foldLeftL("")(_ + _)
+            .map(Some(_))
         }
-      } else {
-        renderer.onError(MULTI_FIELD_CODE, s"""Multiple fields in "${x.name}"""")
-        Observable.empty[String]
-      }
-    case _ => Observable.raiseError(new RuntimeException("Unsupported"))
+
+      case _ => NONE
+    }
+
   }
 
 
-  def eval(interpreter: Interpreter, accessor: model.Accessor, expr: List[Expr], renderer: model.Renderer)(implicit ec: ExecutionContext): Observable[String] = {
-
+  private def eval(value: Value, accessor: model.Accessor, expr: List[Expr], renderer: model.Renderer): COMPUTE = {
     val (fragmentDefInit, others) = expr.partition(_.isInstanceOf[FragmentDef])
     val fragmentDef: Map[String, FragmentDef] = fragmentDefInit.collect { case x: FragmentDef => x }.map(x => x.id -> x).toMap
 
-
-    projector(interpreter, others, accessor, fragmentDef, renderer: model.Renderer)
+    projector(value, others, Context(fragmentDef, accessor, renderer))
   }
 
 
-  def buildInterpreter[T](schema: T)(implicit link: Link, ec: ExecutionContext, commander: Commander[T], rendererFactory: model.RendererFactory = Defaults.JsonFactory): Task[(Map[String, String], Option[String]) => Task[String]] = {
-    commander.command(schema).map { interpreter =>
+  def buildInterpreter[T](schema: T)
+                         (implicit link: Link,
+                          ec: ExecutionContext,
+                          commander: IBuild[T],
+                          rendererFactory: model.RendererFactory = Defaults.JsonFactory
+                         ): (Map[String, String], Option[String]) => Task[Option[String]] = {
 
-      (queryParams: Map[String, String], body: Option[String]) => {
+    val fields = commander.build(schema)
 
-        Task.fromFuture(link.build(queryParams, body)).flatMap { accessor =>
+    (queryParams: Map[String, String], body: Option[String]) => {
 
-          accessor.query match {
-            case Some(value) =>
+      Task.fromFuture(link.build(queryParams, body)).flatMap { accessor =>
 
-              Parser.processor(value).flatMap { xs =>
-                val renderer: model.Renderer = rendererFactory.supply()
+        accessor.query match {
+          case Some(value) =>
 
-                eval(interpreter, accessor, xs, renderer).foldLeftL("")(_ + _)
+            Parser.processor(value).flatMap { xs =>
+              println(xs)
+              val renderer: model.Renderer = rendererFactory.supply()
+              val start = System.currentTimeMillis()
+              eval(fields, accessor, xs, renderer).map { r =>
+                println((System.currentTimeMillis() - start) * 0.001)
+                r
               }
+            }
 
-            case None => Task.raiseError(new RuntimeException("query or mutation required"))
-          }
+          case None => Task.raiseError(new RuntimeException("query or mutation required"))
         }
       }
     }
+
   }
 
 
