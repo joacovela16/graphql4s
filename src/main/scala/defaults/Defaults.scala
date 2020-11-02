@@ -1,7 +1,7 @@
 package defaults
 
 import io.circe.{Json, JsonObject}
-import model.{Accessor, IAtomic, INumber, IString, Link, Renderer, RendererFactory}
+import model._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -20,25 +20,18 @@ object Defaults {
       case INumber(value) => s""""$value""""
     }
 
-    override def itemStart: String = "["
+    val itemStart: String = "["
+    val itemSeparator: String = ","
+    val itemEnd: String = "]"
+    val onStartObject: String = "{"
+    val objectSeparator: String = ","
+    val onEndObject: String = "}"
 
-    override def itemSeparator: String = ","
+    override def onFieldStart(fieldName: String): String = s""""$fieldName": """
 
-    override def itemEnd: String = "]"
+    override def onFieldEnd(fieldName: String): String = ""
 
-    override def onStartObject: String = "{"
-
-    override def onObjectField(fieldName: String, value: String): String = {
-      s""""$fieldName": $value"""
-    }
-
-    override def onEndObject: String = "}"
-
-    override def onError(level: String, code: String, message: String): Unit = {
-      println(s"$level - $code - $message")
-    }
-
-    override def objectSeparator: String = ","
+    override def onError(level: model.LogLevel, code: String, message: String): String = s"""{"message": "$code", "message": "$message"}"""
   }
 
   implicit val link: Link = new Link {

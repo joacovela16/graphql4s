@@ -1,34 +1,36 @@
 //import StructTypeDerivation._
 
 import defaults.Defaults._
-import monix.eval.Task
+import monix.reactive.Observable
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 
 object Main extends EncoderTypeDerivation with StructTypeDerivation {
 
-
   case class CurrentLocation(coord: String)
 
   case class Location(x: Int, y: Int, sum: Int => Int = x => x * 2)
 
-  case class Human(name: String, current: CurrentLocation, height: Int => Location, list: List[Location])
+  sealed trait Car {
+    def model: String
+  }
+
+  case class Fiat(model: String, year: Int) extends Car
+
+  case class Query(car: () => Car, name: String, current: CurrentLocation, height: Int => Location, list: List[Location])
 
   def main(args: Array[String]): Unit = {
 
     val query: Map[String, String] = Map(
       "query" ->
         """|{
-           | name
-           | current
-           | list{
-           |  x
-           |  sum(2)
-           | }
-           | ...template
+           |  car()
+           |  name
+           |  current
            | fragment template{
-           |  height(50)
+           |  height(50){
+           |  }
            | }
            |}
            |""".stripMargin,
@@ -42,7 +44,8 @@ object Main extends EncoderTypeDerivation with StructTypeDerivation {
 
     import monix.execution.Scheduler.Implicits.global
 
-    val instance: Human = Human(
+    val instance: Query = Query(
+      () => Fiat("strada", 2020),
       "joaquin",
       CurrentLocation("mdeo"),
       x => Location(x, x + 1),
@@ -50,11 +53,15 @@ object Main extends EncoderTypeDerivation with StructTypeDerivation {
     )
 
 
-    val intPromise: (Map[String, String], Option[String]) => Task[Option[String]] = GraphQL.buildInterpreter(instance)
+    val intPromise: (Map[String, String], Option[String]) => Observable[String] = GraphQL.buildInterpreter(instance)
 
-    val r: Task[Option[String]] = intPromise(query, None)
-    println(Await.result(r.executeAsync.runToFuture, Duration.Inf))
+    val start = System.currentTimeMillis()
+    val r: Observable[String] = intPromise(query, None)
 
+    r
+
+    println(Await.result(r.foldLeftL("")(_ + _).executeAsync.runToFuture, Duration.Inf))
+    println((System.currentTimeMillis() - start) * 0.001)
 
   }
 }

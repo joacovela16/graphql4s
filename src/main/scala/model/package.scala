@@ -10,6 +10,17 @@ package object model {
   type QueryParams = Map[String, String]
   type Body = Option[String]
 
+  sealed trait LogLevel
+  case object ERROR extends LogLevel{
+    override def toString: String = "error"
+  }
+  case object WARN extends LogLevel{
+    override def toString: String = "warn"
+  }
+  case object INFO extends LogLevel{
+    override def toString: String = "info"
+  }
+
   trait RendererFactory {
     def supply(): Renderer
   }
@@ -30,21 +41,23 @@ package object model {
 
     def onAtomic(d: IAtomic): String
 
-    def itemStart: String
+    val itemStart: String
 
-    def itemSeparator: String
+    val itemSeparator: String
 
-    def itemEnd: String
+    val itemEnd: String
 
-    def onStartObject: String
+    val onStartObject: String
 
-    def objectSeparator: String
+    val objectSeparator: String
 
-    def onObjectField(fieldName: String, value: String): String
+    val onEndObject: String
 
-    def onEndObject: String
+    def onFieldStart(fieldName: String): String
 
-    def onError(level: String, code: String, message: String): Unit
+    def onFieldEnd(fieldName: String): String
+
+    def onError(level: LogLevel, code: String, message: String): String
   }
 
 
@@ -53,7 +66,7 @@ package object model {
   }
 
   trait Encoder[T] {
-    def apply(data: String): Task[T]
+    def apply(data: String): Observable[T]
   }
 
   final case class InterpreterError(message: String) extends Throwable(message)
@@ -61,9 +74,9 @@ package object model {
   final case class Issue(code: String, message: String)
 
   trait IBuild[T] {
-    def build(d: T): Value
+    def apply(d:T): Value
+//    def build(d: T): Value
   }
-
 
   sealed trait Value extends Serializable {
 
@@ -72,7 +85,7 @@ package object model {
       case _ => None
     }
 
-    def call(args: Seq[String]): Option[Task[Value]] = this.as[IFunction].map(x => x.invoke(args))
+    def call(args: Seq[String]): Option[Observable[Value]] = this.as[IFunction].map(x => x.invoke(args))
 
     def isObject: Boolean = false
 
@@ -100,24 +113,17 @@ package object model {
 
   final case class INumber(value: Double) extends IAtomic {
     override def isNumber: Boolean = true
-
-
   }
 
-  final case class IAsync(data: Task[Value]) extends Value {
-
+  final case class IAsync(data: Observable[Value]) extends Value {
   }
 
   final case class IArray(data: Observable[Value]) extends Value {
     override def isArray: Boolean = true
-
-
   }
 
   final case class IOption(value: Option[Value]) extends Value {
     override def isOption: Boolean = true
-
-
   }
 
 
@@ -129,7 +135,6 @@ package object model {
     def getField(fieldName: String): Option[Value] = fieldMap.get(fieldName)
 
     override def isObject: Boolean = true
-
   }
 
   trait IFunction extends Value {
@@ -137,11 +142,11 @@ package object model {
 
     def argumentsLength: Int
 
-    def apply(args: Seq[String]): Task[Value] = {
-      if (args.length == argumentsLength) invoke(args) else Task.raiseError(new RuntimeException("Invalid arguments size"))
+    def apply(args: Seq[String]): Observable[Value] = {
+      if (args.length == argumentsLength) invoke(args) else Observable.raiseError(new RuntimeException("Invalid arguments size"))
     }
 
-    def invoke(args: Seq[String]): Task[Value]
+    def invoke(args: Seq[String]): Observable[Value]
   }
 
 }

@@ -9,6 +9,7 @@ object Parser {
 
 
   Source.fromString("asdad")
+
   sealed trait Expr {
     def id: String
   }
@@ -33,7 +34,7 @@ object Parser {
 
   final case class Alias(id: String, body: FunctionExtractor) extends Expr
 
-  private def name[_: P]: P[String] = P(CharsWhileIn("a-zA-Z0-9", 1).!)
+  private def name[_: P]: P[String] = P(CharsWhileIn("_a-zA-Z0-9", 1).!)
 
   private def stringQuoted[_: P]: P[String] = P("\"" ~ name ~ "\"")
 
