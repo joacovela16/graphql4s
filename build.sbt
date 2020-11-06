@@ -73,7 +73,7 @@ version := "1.0"
 
 // To learn more about multi-project builds, head over to the official sbt
 // documentation at http://www.scala-sbt.org/documentation.html
-libraryDependencies += "com.propensive" %% "magnolia" % "0.16.0"
+libraryDependencies += "com.propensive" %% "magnolia" % "0.17.0"
 libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value % Provided
 libraryDependencies += "com.github.ghostdogpr" %% "caliban" % "0.9.1"
 

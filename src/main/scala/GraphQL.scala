@@ -3,6 +3,7 @@ import defaults.Defaults
 import model.{Accessor, IBuild, Link, Value}
 import monix.eval.Task
 import monix.reactive.Observable
+import sext.SextAnyTreeString
 
 import scala.concurrent.ExecutionContext
 import scala.language.implicitConversions
@@ -74,8 +75,7 @@ object GraphQL {
           Observable
             .fromIterable(expr)
             .flatMapIterable {
-              case FragmentRef(id) =>
-                context.fragments.get(id).fold(List.empty[Expr])(_.body)
+              case FragmentRef(id) => context.fragments.get(id).fold(List.empty[Expr])(_.body)
               case x => List(x)
             }
             .flatMap {
@@ -250,14 +250,17 @@ object GraphQL {
   }
 
 
-  def buildInterpreter[T](schema: T)
+  def buildInterpreter[T](instance: T)
                          (implicit link: Link,
                           ec: ExecutionContext,
                           builder: IBuild[T],
                           rendererFactory: model.RendererFactory = Defaults.JsonFactory
                          ): (Map[String, String], Option[String]) => Observable[String] = {
 
-    val valueSchema: Value = builder(schema)
+    val valueSchema: Value = builder(instance)
+    val schema = builder.schema
+    println(schema.treeString)
+
 
     (queryParams: Map[String, String], body: Option[String]) => {
 

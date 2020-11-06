@@ -11,13 +11,16 @@ package object model {
   type Body = Option[String]
 
   sealed trait LogLevel
-  case object ERROR extends LogLevel{
+
+  case object ERROR extends LogLevel {
     override def toString: String = "error"
   }
-  case object WARN extends LogLevel{
+
+  case object WARN extends LogLevel {
     override def toString: String = "warn"
   }
-  case object INFO extends LogLevel{
+
+  case object INFO extends LogLevel {
     override def toString: String = "info"
   }
 
@@ -74,8 +77,8 @@ package object model {
   final case class Issue(code: String, message: String)
 
   trait IBuild[T] {
-    def apply(d:T): Value
-//    def build(d: T): Value
+    val schema: Type
+    def apply(d: T): Value
   }
 
   sealed trait Value extends Serializable {
