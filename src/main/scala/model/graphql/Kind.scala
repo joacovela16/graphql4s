@@ -1,16 +1,13 @@
 package model.graphql
 
-import model.TargetFormat
-
 trait Kind {
-  private val asStr: TargetFormat = {
+  private val asStr: String = {
     val tmp: String = this.getClass.getSimpleName
     tmp.substring(0, tmp.length - 1)
   }
 
   override def toString: String = asStr
 }
-
 
 case object SCALAR extends Kind
 

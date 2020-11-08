@@ -1,7 +1,7 @@
 package defaults
 
 import model.Renderer
-import model.executor.{IAtomic, INumber, IString}
+import model.executor.{IAtomic, IBoolean, IDouble, IInt, IString}
 
 case object JsonRenderer extends Renderer {
 
@@ -9,7 +9,9 @@ case object JsonRenderer extends Renderer {
 
   override def onAtomic(d: IAtomic): String = d match {
     case IString(value) => s""""$value""""
-    case INumber(value) => s""""$value""""
+    case IDouble(value) => value.toString
+    case IInt(value) => value.toString
+    case IBoolean(value) => value.toString
   }
 
   val itemStart: String = "["

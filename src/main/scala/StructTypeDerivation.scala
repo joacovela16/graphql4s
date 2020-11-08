@@ -1,6 +1,6 @@
 import annotations.{GQLDescription, GQLUnion}
 import magnolia._
-import model.executor.{Executor, IArray, IAsync, IFunction, INumber, IObject, IString, InterpreterError}
+import model.executor.{Executor, IArray, IAsync, IDouble, IFunction, IInt, IObject, IString, InterpreterError}
 import model.{graphql, _}
 import model.graphql.{ENUM, Field, INPUT_OBJECT, INTERFACE, InputValue, Kind, LIST, MUTATION_SCOPE, OBJECT, QUERY_SCOPE, SCALAR, SUBSCRIPTION_SCOPE, Type, UNION}
 import monix.reactive.Observable
@@ -102,12 +102,12 @@ trait StructTypeDerivation {
   implicit val intEnc: IBuild[Int] = new IBuild[Int] {
     override def schema: Type = Type(SCALAR, "Int")
 
-    override def apply(d: Int): Executor = INumber(d)
+    override def apply(d: Int): Executor = IInt(d)
   }
   implicit val doubleEnc: IBuild[Double] = new IBuild[Double] {
     override def schema: Type = Type(SCALAR, "Double")
 
-    override def apply(d: Double): Executor = INumber(d)
+    override def apply(d: Double): Executor = IDouble(d)
   }
 
   implicit def iterableEnc[A, C[x] <: Iterable[x]](implicit e: IBuild[A]): IBuild[C[A]] = new IBuild[C[A]] {
