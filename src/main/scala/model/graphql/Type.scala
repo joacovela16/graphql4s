@@ -1,4 +1,4 @@
-package model
+package model.graphql
 
 import scala.collection.mutable
 
@@ -18,21 +18,4 @@ final case class Type(
   def isScalar: Boolean = kind == SCALAR
 
   def isObject: Boolean = kind == OBJECT
-}
-
-final case class InputValue(_type: Type, name: String, description: Option[String] = None, defaultValue: Option[String] = None)
-
-final case class Field(
-                        _type: Type,
-                        name: String,
-                        description: Option[String] = None,
-                        args: Seq[InputValue] = Nil,
-                        isDeprecated: Boolean = false,
-                        deprecationReason: Option[String] = None
-                      )
-
-final case class EnumValue(name: String, description: Option[String] = None, isDeprecated: Boolean = false, deprecationReason: Option[String])
-
-trait TBuilder[T] {
-  def apply(): Type
 }

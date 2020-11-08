@@ -1,6 +1,8 @@
 import annotations.{GQLDescription, GQLUnion}
 import magnolia._
-import model._
+import model.executor.{Executor, IArray, IAsync, IFunction, INumber, IObject, IString, InterpreterError}
+import model.{graphql, _}
+import model.graphql.{ENUM, Field, INPUT_OBJECT, INTERFACE, InputValue, Kind, LIST, MUTATION_SCOPE, OBJECT, QUERY_SCOPE, SCALAR, SUBSCRIPTION_SCOPE, Type, UNION}
 import monix.reactive.Observable
 
 import scala.collection.mutable
@@ -61,7 +63,7 @@ trait StructTypeDerivation {
       }
     }
 
-    val _type: Type = Type(
+    val _type: Type = graphql.Type(
       kind,
       ctx.typeName.short,
       ctx.annotations.collectFirst { case x: GQLDescription => x.value },
@@ -110,7 +112,7 @@ trait StructTypeDerivation {
 
   implicit def iterableEnc[A, C[x] <: Iterable[x]](implicit e: IBuild[A]): IBuild[C[A]] = new IBuild[C[A]] {
 
-    private val _type: Type = Type(
+    private val _type: Type = graphql.Type(
       LIST,
       "List",
       ofType = Some(e.schema)
@@ -124,13 +126,13 @@ trait StructTypeDerivation {
   }
 
   implicit def futureEnc[T](implicit e: IBuild[T]): IBuild[Future[T]] = new IBuild[Future[T]] {
-    val schema: Type = Type(OBJECT, "Future", ofType = Some(e.schema))
+    val schema: Type = graphql.Type(OBJECT, "Future", ofType = Some(e.schema))
 
     override def apply(d: Future[T]): Executor = IAsync(Observable.from(d).map(e.apply))
   }
 
   implicit def f0Enc[OUT](implicit build: IBuild[OUT]): IBuild[() => OUT] = new IBuild[() => OUT] {
-    val schema: Type = Type(INPUT_OBJECT, "INPUT_OBJECT", ofType = Some(build.schema))
+    val schema: Type = graphql.Type(INPUT_OBJECT, "INPUT_OBJECT", ofType = Some(build.schema))
 
     override def apply(d: () => OUT): Executor = {
       new IFunction {
@@ -148,7 +150,7 @@ trait StructTypeDerivation {
   implicit def f1Enc[A, OUT](implicit build: IBuild[OUT], aBuild: IBuild[A], e: Encoder[A]): IBuild[A => OUT] = {
 
     new IBuild[A => OUT] {
-      val schema: Type = Type(
+      val schema: Type = graphql.Type(
         INPUT_OBJECT,
         "INPUT_OBJECT",
         inputFields = mutable.ArrayBuffer(
@@ -172,12 +174,12 @@ trait StructTypeDerivation {
 
   implicit def f2Enc[A, B, OUT](implicit build: IBuild[OUT], ab: IBuild[A], bb: IBuild[B], e1: Encoder[A], e2: Encoder[B]): IBuild[(A, B) => OUT] = {
     new IBuild[(A, B) => OUT] {
-      val schema: Type = Type(
+      val schema: Type = graphql.Type(
         INPUT_OBJECT,
         "INPUT_OBJECT",
         inputFields = mutable.ArrayBuffer(
-          InputValue(ab.schema, ab.schema.name),
-          InputValue(bb.schema, bb.schema.name)
+          graphql.InputValue(ab.schema, ab.schema.name),
+          graphql.InputValue(bb.schema, bb.schema.name)
         ),
         ofType = Some(build.schema)
       )

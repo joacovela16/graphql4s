@@ -30,6 +30,13 @@ object Main extends EncoderTypeDerivation with StructTypeDerivation {
     val query: Map[String, String] = Map(
       "query" ->
         """|{
+           |  __type("CurrentLocation"){
+           |    name
+           |    description
+           |    fields(false){
+           |      ofType
+           |    }
+           |  }
            |  car
            |}
            |""".stripMargin,

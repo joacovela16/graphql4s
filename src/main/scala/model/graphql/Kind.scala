@@ -1,4 +1,6 @@
-package model
+package model.graphql
+
+import model.TargetFormat
 
 trait Kind {
   private val asStr: TargetFormat = {

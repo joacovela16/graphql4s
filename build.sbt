@@ -75,7 +75,6 @@ version := "1.0"
 // documentation at http://www.scala-sbt.org/documentation.html
 libraryDependencies += "com.propensive" %% "magnolia" % "0.17.0"
 libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value % Provided
-libraryDependencies += "com.github.ghostdogpr" %% "caliban" % "0.9.1"
 
 // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
 libraryDependencies += "com.fasterxml.jackson.core" % "jackson-core" % "2.11.2"

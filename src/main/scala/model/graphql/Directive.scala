@@ -1,4 +1,4 @@
-package model
+package model.graphql
 
 final case class Directive(
                             name: String,

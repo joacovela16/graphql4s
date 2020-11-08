@@ -1,4 +1,4 @@
-package model
+package model.graphql
 
 sealed trait Scope
 case object QUERY_SCOPE extends Scope

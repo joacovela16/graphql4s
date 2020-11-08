@@ -1,8 +1,6 @@
-package model
+package model.graphql
 
-trait DirectiveLocation {
-
-}
+sealed trait DirectiveLocation
 
 case object DL_QUERY extends DirectiveLocation
 case object DL_MUTATION extends DirectiveLocation

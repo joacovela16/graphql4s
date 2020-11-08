@@ -1,4 +1,6 @@
 package model
+import executor.Executor
+import model.graphql.{QUERY_SCOPE, Scope}
 
 trait Binding {
 
