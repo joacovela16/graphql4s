@@ -88,3 +88,5 @@ libraryDependencies += "io.circe" %% "circe-core" % "0.13.0"
 libraryDependencies += "com.github.nikita-volkov" % "sext" % "0.2.4"
 //libraryDependencies += "dev.zio" %% "zio" % "1.0.1"
 libraryDependencies += "io.monix" %% "monix" % "3.2.2+44-ab4c068c"
+// https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+libraryDependencies += "org.slf4j" % "slf4j-api" % "1.7.30"

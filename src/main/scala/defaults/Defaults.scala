@@ -34,7 +34,7 @@ object Defaults {
     override def onError(level: model.LogLevel, code: String, message: String): String = s"""{"message": "$code", "message": "$message"}"""
   }
 
-  implicit val link: Link = new Link {
+  final val DEFAULT_LINK: Link = new Link {
 
     override def build(queryParams: Map[String, String], body: Option[String])(implicit executionContext: ExecutionContext): Future[Accessor] = Future {
 

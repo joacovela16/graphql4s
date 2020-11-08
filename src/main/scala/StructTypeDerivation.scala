@@ -225,12 +225,12 @@ trait StructTypeDerivation {
     }
   }
 
-  implicit class BindUtils[T](instance: T)(implicit tBuilder: IBuild[T]) {
-    def asQuery: Binding = Binding(instance, tBuilder, QUERY_SCOPE)
+  implicit class BindUtils[T](instance: T) {
+    def asQuery(implicit tBuilder: IBuild[T]): Binding = Binding(instance, tBuilder, QUERY_SCOPE)
 
-    def asMutation: Binding = Binding(instance, tBuilder, QUERY_SCOPE)
+    def asMutation(implicit tBuilder: IBuild[T]): Binding = Binding(instance, tBuilder, MUTATION_SCOPE)
 
-    def asSubscription: Binding = Binding(instance, tBuilder, SUBSCRIPTION_SCOPE)
+    def asSubscription(implicit tBuilder: IBuild[T]): Binding = Binding(instance, tBuilder, SUBSCRIPTION_SCOPE)
   }
 
 }

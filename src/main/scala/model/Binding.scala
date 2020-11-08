@@ -8,7 +8,7 @@ trait Binding {
 
   def getBy(scope: Scope): Seq[BindingItem] = schema.filter(_.scope == scope)
 
-  def ++(other: Binding): Binding = {
+  def +(other: Binding): Binding = {
     val self: Binding = this
     new Binding {
       override def schema: Seq[BindingItem] = self.schema ++ other.schema

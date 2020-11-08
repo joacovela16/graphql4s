@@ -1,7 +1,7 @@
 //import StructTypeDerivation._
 
 import annotations.GQLDescription
-import defaults.Defaults._
+import model.Binding
 import monix.reactive.Observable
 
 import scala.concurrent.Await
@@ -23,18 +23,14 @@ object Main extends EncoderTypeDerivation with StructTypeDerivation {
 
   case class Query(car: List[Car], name: String, current: CurrentLocation, height: Int => Location, list: List[Location])
 
-  case class Mutation(car: Int)
+  case class Mutation(number: Int)
 
   def main(args: Array[String]): Unit = {
 
     val query: Map[String, String] = Map(
       "query" ->
         """|{
-           |  __schema{
-           |    types{
-           |      name
-           |    }
-           |  }
+           |  car
            |}
            |""".stripMargin,
       "variables" ->
@@ -48,7 +44,7 @@ object Main extends EncoderTypeDerivation with StructTypeDerivation {
     import monix.execution.Scheduler.Implicits.global
 
     val queryInstance: Query = Query(
-      List(Fiat("strada", 2020)),
+       List(Fiat("strada", 2020)),
       "joaquin",
       CurrentLocation("mdeo"),
       (x: Int) => Location(x, x + 1),
@@ -57,11 +53,11 @@ object Main extends EncoderTypeDerivation with StructTypeDerivation {
 
     val mutationInstance: Mutation = Mutation(10)
 
-    val binding = queryInstance.asQuery ++ mutationInstance.asMutation
+    val binding: Binding = queryInstance.asQuery + mutationInstance.asMutation
 
-    val intPromise: (Map[String, String], Option[String]) => Observable[String] = GraphQL.interpreter(queryInstance)
+    val intPromise: (Map[String, String], Option[String]) => Observable[String] = GraphQL.interpreter(binding)
 
-    val start = System.currentTimeMillis()
+    val start: Long = System.currentTimeMillis()
     val r: Observable[String] = intPromise(query, None)
 
     println(Await.result(r.foldLeftL("")(_ + _).executeAsync.runToFuture, Duration.Inf))

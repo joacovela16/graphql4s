@@ -3,21 +3,21 @@ import defaults.Defaults
 import model._
 import monix.eval.Task
 import monix.reactive.Observable
-import sext.SextAnyTreeString
+import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.mutable
 import scala.concurrent.ExecutionContext
 import scala.language.implicitConversions
+import scala.util.{Failure, Success, Try}
 
 object GraphQL {
 
+  private lazy val logger: Logger = LoggerFactory.getLogger(this.getClass)
   private final val EXECUTOR_EMPTY: Observable[Executor] = Observable.empty[Executor]
   private final val MAP_EMPTY: Map[String, Type] = Map.empty
-  private type COMPUTE = Observable[String]
-
   private final val NONE: COMPUTE = Observable.empty[String]
 
-  private final val MULTI_FIELD_CODE: String = "multi-fields"
+  private type COMPUTE = Observable[String]
 
   private implicit def toOption[A](d: A): Option[A] = Some(d)
 
@@ -49,7 +49,7 @@ object GraphQL {
         if (isEmpty) {
           NONE
         } else {
-          (renderer.onFieldStart(fieldName) +: obs :+ renderer.onFieldEnd(fieldName)).foldLeft("")(_ + _)
+          renderer.onFieldStart(fieldName) +: obs :+ (renderer.onFieldEnd(fieldName) + renderer.itemSeparator)
         }
       }
   }
@@ -57,32 +57,27 @@ object GraphQL {
   private def projector(value: Executor, expr: Iterable[Expr], context: Context): COMPUTE = {
     val renderer: model.Renderer = context.renderer
     value match {
-      case atomic: model.IAtomic =>
-        Observable(renderer.onAtomic(atomic))
-
-      case model.IAsync(data) =>
-        data.flatMap(x => projector(x, expr, context))
-
+      case atomic: model.IAtomic => Observable(renderer.onAtomic(atomic))
+      case model.IAsync(data) => data.flatMap(x => projector(x, expr, context))
       case model.IArray(data) =>
-        data
-          .flatMap(x => projector(x, expr, context))
-          .intersperse(renderer.itemStart, renderer.itemSeparator, renderer.itemEnd)
-
+        val middle: Observable[String] = data.flatMap(x => projector(x, expr, context) :+ renderer.itemSeparator).dropLast(1)
+        renderer.itemStart +: middle :+ renderer.itemEnd
       case model.IOption(value) => value.flatMap(x => projector(x, expr, context))
 
       case obj: model.IObject =>
 
         if (expr.isEmpty) {
 
-          Observable
+          val middle: Observable[String] = Observable
             .fromIterable(obj.fields)
             .filterNot { case (_, value) => value.isFunction }
             .flatMap { case (fieldName, value) => renderField(fieldName, projector(value, Nil, context), renderer) }
-            .intersperse(renderer.onStartObject, renderer.objectSeparator, renderer.onEndObject)
-            .foldLeft("")(_ + _)
+            .dropLast(1)
+
+          renderer.onStartObject +: middle :+ renderer.onEndObject
 
         } else {
-          Observable
+          val middle: Observable[String] = Observable
             .fromIterable(expr)
             .flatMapIterable {
               case FragmentRef(id) => context.fragments.get(id).fold(List.empty[Expr])(_.body)
@@ -106,10 +101,9 @@ object GraphQL {
                 obj
                   .getField(body.id)
                   .fold(NONE)(value => renderField(id, invokeFunction(value, body, context), renderer))
-            }
-            .intersperse(renderer.onStartObject, renderer.objectSeparator, renderer.onEndObject)
-            .switchIfEmpty(Observable(s"${renderer.onStartObject}${renderer.onEndObject}"))
-            .foldLeft("")(_ + _)
+            }.dropLast(1)
+
+          renderer.onStartObject +: middle :+ renderer.onEndObject
         }
     }
 
@@ -255,11 +249,10 @@ object GraphQL {
     val fragmentDef: Map[String, FragmentDef] = fragmentDefInit.collect { case x: FragmentDef => x }.map(x => x.id -> x).toMap
     val context: Context = Context(fragmentDef, accessor, rend)
 
-    taskValidator(value, others, context)
-      .switchIfEmpty(projector(value, others, context))
+    taskValidator(value, others, context).switchIfEmpty(projector(value, others, context))
   }
 
-  private def introspection(queryID: String, t: Type): Seq[(String, Executor)] = {
+  private def introspection(binding: Binding): Try[Executor] = {
 
     def inputValueMapper(data: InputValue): Executor = {
       IObject(
@@ -329,7 +322,8 @@ object GraphQL {
       }
     }
 
-    def resolver(queryID: String, data: Map[String, Type]): Seq[(String, Executor)] = {
+    def resolver(querySystem: Type, mutationSystem: Option[Type], binding: Binding): Executor = {
+      val data: Map[String, Type] = binding.schema.map(x => collectTypes(x._type)).foldLeft(Map.empty[String, Type])(_ ++ _)
       val cache: String => Observable[Executor] = {
         val cache: mutable.Map[String, Executor] = mutable.Map.empty[String, Executor]
         (key: String) => {
@@ -340,57 +334,94 @@ object GraphQL {
         }
       }
 
-      Seq(
-        "__type" -> new IFunction {
-          override def argumentsLength: Int = 1
+      IObject(
+        "data",
+        Seq(
+          "__type" -> new IFunction {
+            override def argumentsLength: Int = 1
 
-          override def invoke(args: Seq[String]): Observable[Executor] =
-            args match {
-              case key +: Nil => cache(key)
-              case _ => Observable.raiseError(new RuntimeException("Invalid number of arguments"))
-            }
-        },
-        "__schema" -> IObject(
-          "__schema",
-          Seq(
-            "description" -> IOption(data.get(queryID).flatMap(_.description).fold(EXECUTOR_EMPTY)(x => Observable.pure(IString(x)))),
-            "types" -> IArray(Observable.fromIterable(data.keys).flatMap(cache)),
-            "queryType" -> IOption(cache(queryID)),
-            "mutationType" -> IOption(EXECUTOR_EMPTY), // todo
-            "subscriptionType" -> IOption(EXECUTOR_EMPTY), // todo
-            "directives" -> IArray(EXECUTOR_EMPTY) // todo
+            override def invoke(args: Seq[String]): Observable[Executor] =
+              args match {
+                case key +: Nil => cache(key)
+                case _ => Observable.raiseError(new RuntimeException("Invalid number of arguments"))
+              }
+          },
+          "__schema" -> IObject(
+            "__schema",
+            Seq(
+              "description" -> IOption(EXECUTOR_EMPTY), // fixme
+              "types" -> IArray(Observable.fromIterable(data.keys).flatMap(cache)),
+              "queryType" -> typeMapper(querySystem),
+              "mutationType" -> IOption(mutationSystem.map(typeMapper).map(Observable.pure).getOrElse(EXECUTOR_EMPTY)),
+              "subscriptionType" -> IOption(EXECUTOR_EMPTY), // todo
+              "directives" -> IArray(EXECUTOR_EMPTY) // todo
+            )
           )
         )
       )
     }
 
-    resolver(queryID, collectTypes(t))
+    def joinTypes(aType: Type, bType: Type): Type = {
+      if (aType.kind == bType.kind) {
+        Type(
+          aType.kind,
+          Seq(aType.name, bType.name).mkString(", "),
+          Some(Seq(aType.description, bType.description).flatten.mkString(", ")),
+          aType.fields ++ bType.fields,
+          aType.interfaces ++ bType.interfaces,
+          aType.possibleTypes ++ bType.possibleTypes,
+          aType.enumValues ++ bType.enumValues,
+          aType.inputFields ++ bType.inputFields,
+          None
+        )
+      } else {
+        logger.warn(s"Types '${aType.name}' and ${bType.name} has no same kind.")
+        aType
+      }
+    }
+
+    def joinByScope(binding: Binding, scope: Scope): Option[Type] = {
+      binding.getBy(scope).map(_._type).reduceOption[Type] { case (a, b) => joinTypes(a, b) }
+    }
+
+    val querySystem: Option[Type] = joinByScope(binding, QUERY_SCOPE)
+    val mutationSystem: Option[Type] = joinByScope(binding, MUTATION_SCOPE)
+
+    querySystem match {
+      case Some(query) => Try(resolver(query, mutationSystem, binding))
+      case None => Failure(new RuntimeException("Query model must be instantiate"))
+    }
   }
 
-  def interpreter(bind: Binding)(implicit link: Link, ec: ExecutionContext, rendererFactory: model.RendererFactory = Defaults.JsonFactory): (Map[String, String], Option[String]) => Observable[String] = {
+  def interpreter(bind: Binding, link: Link = Defaults.DEFAULT_LINK, rendererFactory: model.RendererFactory = Defaults.JsonFactory)(implicit ec: ExecutionContext): (Map[String, String], Option[String]) => Observable[String] = {
 
-    val valueSchema: Executor = {
-      bind.executor.joinFields(introspection(bind.schema))
-      builder(instance) match {
-        case IObject(id, fields) =>
-          IObject(id, fields ++ introspection(id, builder.schema))
-        case x => x
-      }
-    }
+    introspection(bind) match {
+      case Failure(exception) =>
 
-    (queryParams: Map[String, String], body: Option[String]) => {
+        logger.error(exception.getLocalizedMessage, exception)
 
-      Observable.fromTask(Task.fromFuture(link.build(queryParams, body))).flatMap { accessor =>
-        accessor.query match {
-          case Some(value) =>
-            Observable.fromTask(Parser.processor(value)).flatMap { xs =>
-              val renderer: model.Renderer = rendererFactory.supply()
-              eval(valueSchema, accessor, xs, renderer)
-            }
-          case None => Observable.raiseError(new RuntimeException("query or mutation required"))
+        (_: Map[String, String], _: Option[String]) => {
+          Observable.raiseError(new RuntimeException("System unavailable."))
         }
-      }
+
+      case Success(introspectionExecutor) =>
+
+        val valueSchema: Executor = bind.executor.joinFields(introspectionExecutor)
+        (queryParams: Map[String, String], body: Option[String]) => {
+
+          Observable.fromTask(Task.fromFuture(link.build(queryParams, body))).flatMap { accessor =>
+            accessor.query match {
+              case Some(value) =>
+                Observable.fromTask(Parser.processor(value)).flatMap { xs =>
+                  val renderer: model.Renderer = rendererFactory.supply()
+                  eval(valueSchema, accessor, xs, renderer)
+                }
+              case None => Observable.raiseError(new RuntimeException("query or mutation required"))
+            }
+          }
+        }
     }
+
   }
 
 }
