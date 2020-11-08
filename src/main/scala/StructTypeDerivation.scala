@@ -1,6 +1,6 @@
 import annotations.{GQLDescription, GQLUnion}
 import magnolia._
-import model.{IBuild, _}
+import model._
 import monix.reactive.Observable
 
 import scala.collection.mutable
@@ -25,20 +25,19 @@ trait StructTypeDerivation {
 
           Field(
             param.typeclass.schema,
-            Some(param.label),
+            param.label,
             param.annotations.collectFirst { case x: GQLDescription => x.value },
             Nil,
             deprecatedDatum.nonEmpty,
             deprecatedDatum.map(_.toString)
           )
         },
-        isObject = ctx.isObject
+        isCaseObject = ctx.isObject
       )
 
+      override def apply(d: T): Executor = {
 
-      override def apply(d: T): Value = {
-
-        val fields: Seq[(String, Value)] = ctx.parameters.map { x =>
+        val fields: Seq[(String, Executor)] = ctx.parameters.map { x =>
           val label: String = x.label
           val value: x.PType = x.default.getOrElse(x.dereference(d))
           label -> x.typeclass(value)
@@ -52,9 +51,10 @@ trait StructTypeDerivation {
   def dispatch[T](ctx: SealedTrait[IBuild, T]): IBuild[T] = {
 
     val kind: Kind = {
-      if (ctx.subtypes.forall(_.typeclass.schema.isObject)) {
+      if (ctx.subtypes.forall(_.typeclass.schema.isCaseObject)) {
         ENUM
       } else if (ctx.annotations.collectFirst { case _: GQLUnion => true }.isDefined) {
+
         UNION
       } else {
         INTERFACE
@@ -69,17 +69,17 @@ trait StructTypeDerivation {
         .subtypes
         .map { s => s.typeclass.schema.fields }
         .reduceOption[Seq[Field]] { case (x, y) =>
-          val xMap: Map[String, Field] = x.flatMap { z => for (name <- z.name) yield (name -> z) }.toMap
-          y.filter { field => field.name.exists(xMap.contains) }
+          val xMap: Map[String, Field] = x.map { z => z.name -> z }.toMap
+          y.filter { field => xMap.contains(field.name) }
         }.getOrElse(Nil),
-      possibleTypes = ctx.subtypes.map(_.typeclass.schema)
+      possibleTypes = ctx.subtypes.map(_.typeclass.schema),
+      isTrait = true
     )
 
     new IBuild[T] {
-      val schema: Type = _type
+      override def schema: Type = _type
 
-      override def apply(d: T): Value = {
-
+      override def apply(d: T): Executor = {
         ctx.dispatch(d) { s =>
           s.typeclass(s.cast(d))
         }
@@ -91,52 +91,53 @@ trait StructTypeDerivation {
 
   private implicit def asError(msg: String): InterpreterError = InterpreterError(msg)
 
-  implicit val stringEnc: model.IBuild[String] = new IBuild[String] {
-    val schema: Type = Type(SCALAR, "String")
+  implicit val stringEnc: IBuild[String] = new IBuild[String] {
+    override def schema: Type = Type(SCALAR, "String")
 
-    override def apply(d: String): Value = IString(d)
+    override def apply(d: String): Executor = IString(d)
   }
 
-  implicit val intEnc: model.IBuild[Int] = new IBuild[Int] {
-    val schema: Type = Type(SCALAR, "Int")
+  implicit val intEnc: IBuild[Int] = new IBuild[Int] {
+    override def schema: Type = Type(SCALAR, "Int")
 
-    override def apply(d: Int): Value = INumber(d)
+    override def apply(d: Int): Executor = INumber(d)
+  }
+  implicit val doubleEnc: IBuild[Double] = new IBuild[Double] {
+    override def schema: Type = Type(SCALAR, "Double")
+
+    override def apply(d: Double): Executor = INumber(d)
   }
 
-  implicit val doubleEnc: model.IBuild[Double] = new IBuild[Double] {
-    val schema: Type = Type(SCALAR, "Double")
+  implicit def iterableEnc[A, C[x] <: Iterable[x]](implicit e: IBuild[A]): IBuild[C[A]] = new IBuild[C[A]] {
 
-    override def apply(d: Double): Value = INumber(d)
-  }
-
-  implicit def iterableEnc[A, C[x] <: Iterable[x]](implicit e: IBuild[A], ct: Manifest[C[_]]): IBuild[C[A]] = new IBuild[C[A]] {
-    val schema: Type = Type(
+    private val _type: Type = Type(
       LIST,
-      ct.runtimeClass.getSimpleName,
+      "List",
       ofType = Some(e.schema)
     )
 
-    override def apply(d: C[A]): Value = {
-      IArray(Observable.fromIterable(d.map(e(_))))
+    override def schema: Type = _type
+
+    override def apply(d: C[A]): Executor = {
+      IArray(Observable.fromIterable(d).map(e.apply))
     }
   }
 
   implicit def futureEnc[T](implicit e: IBuild[T]): IBuild[Future[T]] = new IBuild[Future[T]] {
-    val schema: Type = Type(OBJECT, "Future")
+    val schema: Type = Type(OBJECT, "Future", ofType = Some(e.schema))
 
-    override def apply(d: Future[T]): Value = IAsync(Observable.from(d).map(e(_)))
+    override def apply(d: Future[T]): Executor = IAsync(Observable.from(d).map(e.apply))
   }
 
   implicit def f0Enc[OUT](implicit build: IBuild[OUT]): IBuild[() => OUT] = new IBuild[() => OUT] {
-    val schema: Type = Type(INPUT_OBJECT, "INPUT_OBJECT")
+    val schema: Type = Type(INPUT_OBJECT, "INPUT_OBJECT", ofType = Some(build.schema))
 
-
-    override def apply(d: () => OUT): Value = {
+    override def apply(d: () => OUT): Executor = {
       new IFunction {
 
         override def argumentsLength: Int = 0
 
-        override def invoke(args: Seq[String]): Observable[Value] = args match {
+        override def invoke(args: Seq[String]): Observable[Executor] = args match {
           case Nil => Observable(build(d()))
           case _ => Observable.raiseError(new RuntimeException("Calling error"))
         }
@@ -151,15 +152,16 @@ trait StructTypeDerivation {
         INPUT_OBJECT,
         "INPUT_OBJECT",
         inputFields = mutable.ArrayBuffer(
-          InputValue(aBuild.schema)
-        )
+          InputValue(aBuild.schema, aBuild.schema.name)
+        ),
+        ofType = Some(build.schema)
       )
 
-      override def apply(d: A => OUT): Value = new IFunction {
+      override def apply(d: A => OUT): Executor = new IFunction {
 
         override def argumentsLength: Int = 1
 
-        override def invoke(args: Seq[String]): Observable[Value] = args match {
+        override def invoke(args: Seq[String]): Observable[Executor] = args match {
           case x +: Nil =>
             e(x).map(d).map(build(_))
           case _ => Observable.raiseError(new RuntimeException("Calling error"))
@@ -174,15 +176,16 @@ trait StructTypeDerivation {
         INPUT_OBJECT,
         "INPUT_OBJECT",
         inputFields = mutable.ArrayBuffer(
-          InputValue(ab.schema),
-          InputValue(bb.schema)
-        )
+          InputValue(ab.schema, ab.schema.name),
+          InputValue(bb.schema, bb.schema.name)
+        ),
+        ofType = Some(build.schema)
       )
 
-      override def apply(d: (A, B) => OUT): Value = new IFunction {
+      override def apply(d: (A, B) => OUT): Executor = new IFunction {
         override def argumentsLength: Int = 2
 
-        override def invoke(args: Seq[String]): Observable[Value] = args match {
+        override def invoke(args: Seq[String]): Observable[Executor] = args match {
           case x +: y +: Nil => for (r1 <- e1(x); r2 <- e2(y)) yield build(d(r1, r2))
           case _ => Observable.raiseError(new RuntimeException("Calling error"))
         }
@@ -195,10 +198,10 @@ trait StructTypeDerivation {
     new IBuild[(A, B, C) => OUT] {
       val schema: Type = ???
 
-      override def apply(d: (A, B, C) => OUT): Value = new IFunction {
+      override def apply(d: (A, B, C) => OUT): Executor = new IFunction {
         override def argumentsLength: Int = 3
 
-        override def invoke(args: Seq[String]): Observable[Value] = args match {
+        override def invoke(args: Seq[String]): Observable[Executor] = args match {
           case x +: y +: z +: Nil => for (r1 <- e1(x); r2 <- e2(y); r3 <- e3(z)) yield build(d(r1, r2, r3))
           case _ => Observable.raiseError(new RuntimeException("Calling error"))
         }
@@ -210,10 +213,10 @@ trait StructTypeDerivation {
     new IBuild[(A, B, C, D) => OUT] {
       val schema: Type = ???
 
-      override def apply(func: (A, B, C, D) => OUT): Value = new IFunction {
+      override def apply(func: (A, B, C, D) => OUT): Executor = new IFunction {
         override def argumentsLength: Int = 3
 
-        override def invoke(args: Seq[String]): Observable[Value] = args match {
+        override def invoke(args: Seq[String]): Observable[Executor] = args match {
           case a +: b +: c +: d +: Nil =>
             for (r1 <- e1(a); r2 <- e2(b); r3 <- e3(c); r4 <- e4(d)) yield builder(func(r1, r2, r3, r4))
           case _ => Observable.raiseError(new RuntimeException("Calling error"))
@@ -222,6 +225,13 @@ trait StructTypeDerivation {
     }
   }
 
+  implicit class BindUtils[T](instance: T)(implicit tBuilder: IBuild[T]) {
+    def asQuery: Binding = Binding(instance, tBuilder, QUERY_SCOPE)
+
+    def asMutation: Binding = Binding(instance, tBuilder, QUERY_SCOPE)
+
+    def asSubscription: Binding = Binding(instance, tBuilder, SUBSCRIPTION_SCOPE)
+  }
 
 }
 

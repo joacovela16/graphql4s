@@ -21,19 +21,20 @@ object Main extends EncoderTypeDerivation with StructTypeDerivation {
 
   case class Fiat(model: String, year: Int) extends Car
 
-  case class Query(car:  List[Car], name: String, current: CurrentLocation, height: Int => Location, list: List[Location])
+  case class Query(car: List[Car], name: String, current: CurrentLocation, height: Int => Location, list: List[Location])
+
+  case class Mutation(car: Int)
 
   def main(args: Array[String]): Unit = {
 
     val query: Map[String, String] = Map(
       "query" ->
         """|{
-           | car
-           | fragment template{
-           |  height($var1){
-           |    sum($var1)
+           |  __schema{
+           |    types{
+           |      name
+           |    }
            |  }
-           | }
            |}
            |""".stripMargin,
       "variables" ->
@@ -46,15 +47,19 @@ object Main extends EncoderTypeDerivation with StructTypeDerivation {
 
     import monix.execution.Scheduler.Implicits.global
 
-    val instance: Query = Query(
-       List(Fiat("strada", 2020)),
+    val queryInstance: Query = Query(
+      List(Fiat("strada", 2020)),
       "joaquin",
       CurrentLocation("mdeo"),
       (x: Int) => Location(x, x + 1),
       List(Location(1, 2), Location(3, 4))
     )
 
-    val intPromise: (Map[String, String], Option[String]) => Observable[String] = GraphQL.buildInterpreter(instance)
+    val mutationInstance: Mutation = Mutation(10)
+
+    val binding = queryInstance.asQuery ++ mutationInstance.asMutation
+
+    val intPromise: (Map[String, String], Option[String]) => Observable[String] = GraphQL.interpreter(queryInstance)
 
     val start = System.currentTimeMillis()
     val r: Observable[String] = intPromise(query, None)

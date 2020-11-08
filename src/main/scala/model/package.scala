@@ -28,7 +28,6 @@ package object model {
     def supply(): Renderer
   }
 
-
   trait Accessor {
     def apply(key: String): Option[String]
 
@@ -36,7 +35,7 @@ package object model {
   }
 
   trait Render {
-    def process(interpreter: Value): Task[String]
+    def process(interpreter: Executor): Task[String]
   }
 
   trait Renderer {
@@ -63,7 +62,6 @@ package object model {
     def onError(level: LogLevel, code: String, message: String): String
   }
 
-
   trait Link {
     def build(queryParams: Map[String, String], body: Option[String])(implicit executionContext: ExecutionContext): Future[Accessor]
   }
@@ -76,80 +74,57 @@ package object model {
 
   final case class Issue(code: String, message: String)
 
-  trait IBuild[T] {
-    val schema: Type
-    def apply(d: T): Value
-  }
+  sealed trait Executor {
 
-  sealed trait Value extends Serializable {
-
-    def as[B <: Value](implicit ct: ClassTag[B]): Option[B] = this match {
+    def as[B <: Executor](implicit ct: ClassTag[B]): Option[B] = this match {
       case x: B if ct.runtimeClass.isInstance(this) => Option(x)
       case _ => None
     }
 
-    def call(args: Seq[String]): Option[Observable[Value]] = this.as[IFunction].map(x => x.invoke(args))
+    def joinFields(other: Executor) : Executor = {
+      {
+        for {
+          a <- this.as[IObject]
+          b <- other.as[IObject]
+        } yield IObject(s"${a.id} :+: ${b.id}", a.fields ++ b.fields)
+      }.getOrElse(this)
+    }
 
-    def isObject: Boolean = false
-
-    def isArray: Boolean = false
-
-    def isString: Boolean = false
-
-    def isNumber: Boolean = false
-
-    def isOption: Boolean = false
+    def call(args: Seq[String]): Option[Observable[Executor]] = this.as[IFunction].map(x => x.invoke(args))
 
     def isFunction: Boolean = false
-
-    def isFail: Boolean = false
-
-    def ignore: Boolean = false
   }
 
-  sealed trait IAtomic extends Value
+  sealed trait IAtomic extends Executor
 
-  final case class IString(value: String) extends IAtomic {
-    override def isString: Boolean = true
+  final case class IString(value: String) extends IAtomic
 
+  final case class IBoolean(value: Boolean) extends IAtomic
+
+  final case class INumber(value: Double) extends IAtomic
+
+  final case class IAsync(value: Observable[Executor]) extends Executor
+
+  final case class IArray(value: Observable[Executor]) extends Executor
+
+  final case class IOption(value: Observable[Executor]) extends Executor
+
+  final case class IObject(id: String, fields: Seq[(String, Executor)]) extends Executor {
+    private val fieldMap: Map[String, Executor] = fields.toMap
+
+    def getField(fieldName: String): Option[Executor] = fieldMap.get(fieldName)
   }
 
-  final case class INumber(value: Double) extends IAtomic {
-    override def isNumber: Boolean = true
-  }
-
-  final case class IAsync(data: Observable[Value]) extends Value {
-  }
-
-  final case class IArray(data: Observable[Value]) extends Value {
-    override def isArray: Boolean = true
-  }
-
-  final case class IOption(value: Option[Value]) extends Value {
-    override def isOption: Boolean = true
-  }
-
-
-  final case class IObject(name: String, fields: Seq[(String, Value)]) extends Value {
-    private lazy val fieldMap: Map[String, Value] = fields.toMap
-
-    def isInvalid: Boolean = false
-
-    def getField(fieldName: String): Option[Value] = fieldMap.get(fieldName)
-
-    override def isObject: Boolean = true
-  }
-
-  trait IFunction extends Value {
+  trait IFunction extends Executor {
     override def isFunction: Boolean = true
 
     def argumentsLength: Int
 
-    def apply(args: Seq[String]): Observable[Value] = {
+    def apply(args: Seq[String]): Observable[Executor] = {
       if (args.length == argumentsLength) invoke(args) else Observable.raiseError(new RuntimeException("Invalid arguments size"))
     }
 
-    def invoke(args: Seq[String]): Observable[Value]
+    def invoke(args: Seq[String]): Observable[Executor]
   }
 
 }

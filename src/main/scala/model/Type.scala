@@ -2,24 +2,6 @@ package model
 
 import scala.collection.mutable
 
-sealed trait Kind
-
-case object SCALAR extends Kind
-
-case object OBJECT extends Kind
-
-case object INTERFACE extends Kind
-
-case object UNION extends Kind
-
-case object ENUM extends Kind
-
-case object INPUT_OBJECT extends Kind
-
-case object LIST extends Kind
-
-case object NON_NULL extends Kind
-
 final case class Type(
                        kind: Kind,
                        name: String,
@@ -27,23 +9,29 @@ final case class Type(
                        fields: Seq[Field] = Nil,
                        interfaces: mutable.ArrayBuffer[Type] = mutable.ArrayBuffer.empty[Type],
                        possibleTypes: Seq[Type] = Nil,
-                       enumValues: mutable.ArrayBuffer[Type] = mutable.ArrayBuffer.empty[Type],
+                       enumValues: mutable.ArrayBuffer[EnumValue] = mutable.ArrayBuffer.empty[EnumValue],
                        inputFields: mutable.ArrayBuffer[InputValue] = mutable.ArrayBuffer.empty[InputValue],
                        ofType: Option[Type] = None,
-                       isObject: Boolean = false
-                     )
+                       isCaseObject: Boolean = false,
+                       isTrait: Boolean = false,
+                     ) {
+  def isScalar: Boolean = kind == SCALAR
 
-final case class InputValue(_type: Type, name: Option[String] = None, description: Option[String] = None, defaultValue: Option[String] = None)
+  def isObject: Boolean = kind == OBJECT
+}
+
+final case class InputValue(_type: Type, name: String, description: Option[String] = None, defaultValue: Option[String] = None)
 
 final case class Field(
                         _type: Type,
-                        name: Option[String] = None,
+                        name: String,
                         description: Option[String] = None,
                         args: Seq[InputValue] = Nil,
                         isDeprecated: Boolean = false,
                         deprecationReason: Option[String] = None
                       )
 
+final case class EnumValue(name: String, description: Option[String] = None, isDeprecated: Boolean = false, deprecationReason: Option[String])
 
 trait TBuilder[T] {
   def apply(): Type
