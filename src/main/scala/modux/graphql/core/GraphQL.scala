@@ -41,7 +41,7 @@ object GraphQL {
         val body: List[Expr] = f.body
         value.flatMap(int => projector(int, body, context))
       case None =>
-        context.renderer.onError(ERROR, "invoke-error", s"Problem trying to resolve ${f.id}")
+        logger.error(onError("invoke-error", s"Problem trying to resolve ${f.id}", context.renderer))
         NONE
     }
   }
@@ -131,21 +131,19 @@ object GraphQL {
         if (isEmpty) {
           NONE
         } else {
-          validationObs
-            .foldLeft("")(_ + _)
-            .flatMap { result =>
-              Observable(
-                rend.onStartObject,
-                rend.onFieldStart("errors"),
-                rend.itemStart,
-                result,
-                rend.onFieldEnd("errors"),
-                rend.itemEnd,
-                rend.onEndObject
-              )
-            }
+
+          val start: Observable[String] = Observable(rend.onStartObject, rend.onFieldStart("errors"), rend.itemStart)
+          val end: Observable[String] = Observable(rend.onFieldEnd("errors"), rend.itemEnd, rend.onEndObject)
+
+          start ++ validationObs.intersperse(context.renderer.itemSeparator) ++ end
         }
       }
+  }
+
+  private def onError(code: String, message: String, renderer: Renderer): String = {
+    val codeStr = s"${renderer.onFieldStart("code")}$code${renderer.onFieldEnd("code")}"
+    val msgStr = s"${renderer.onFieldStart("message")}$message${renderer.onFieldEnd("message")}"
+    s"${renderer.onStartObject}$codeStr, $msgStr${renderer.onEndObject}"
   }
 
   private def validatorImpl(value: Executor, expr: Iterable[Expr], context: Context): Observable[String] = {
@@ -155,7 +153,7 @@ object GraphQL {
         if (expr.isEmpty) {
           NONE
         } else {
-          Observable.pure(renderer.onError(ERROR, "expand", "Can't extract items over atomic element"))
+          Observable(onError("expand", "Can't extract items over atomic element", renderer))
         }
       case IAsync(data) => data.flatMap(x => validatorImpl(x, expr, context))
       case IArray(data) => data.head.flatMap(v => validatorImpl(v, expr, context))
@@ -168,13 +166,11 @@ object GraphQL {
             .fromIterable(obj.fields)
             .flatMap { case (name, value) =>
               if (value.isFunction) {
-                Observable(renderer.onError(ERROR, "explicit", s"""Function "$name" must be called explicitly."""))
+                Observable(onError("explicit", s"""Function "$name" must be called explicitly.""", renderer))
               } else {
                 NONE
               }
             }
-            .intersperse(renderer.itemSeparator)
-
         else {
 
           val exprFinal: Iterable[Expr] = expr
@@ -189,7 +185,7 @@ object GraphQL {
               NONE
             } else {
               val duple: String = exprFinal.map(_.id).groupBy(identity).collect { case (x, ys) if ys.size > 1 => s"'$x'" }.mkString(", ")
-              Observable(renderer.onError(ERROR, "duplicated-key", s"Duplicated key $duple."))
+              Observable(onError("duplicated-key", s"Duplicated key $duple.", renderer))
             }
           }
 
@@ -202,7 +198,7 @@ object GraphQL {
                   if (context.fragments.contains(id)) {
                     NONE
                   } else {
-                    Observable(renderer.onError(ERROR, "undefined", s"""Fragment "$id" does not exists."""))
+                    Observable(onError("undefined", s"""Fragment "$id" does not exists.""", renderer))
                   }
 
                 case FunctionExtractor(id, args, body) =>
@@ -214,36 +210,32 @@ object GraphQL {
                           result
                             .flatMap(v => validatorImpl(v, body, context))
                             .onErrorHandle { e =>
-                              renderer.onError(ERROR, "function-call", e.getMessage)
+                              onError("function-call", e.getMessage, renderer)
                             }
-                        case None =>
-                          Observable(renderer.onError(ERROR, "unprocessable", s"""Field "$id" is not a function."""))
+                        case None => Observable(onError("unprocessable", s"""Field "$id" is not a function.""", renderer))
                       }
-                    case None =>
-
-                      Observable(renderer.onError(ERROR, "undefined", s"""Function "$id" does not exists."""))
+                    case None => Observable(onError("undefined", s"""Function "$id" does not exists.""", renderer))
                   }
 
                 case ObjExtractor(id, body) =>
                   obj
                     .getField(id)
-                    .fold(Observable(renderer.onError(ERROR, "undefined", s"""Field "$id" does not exists.""")))(value => validatorImpl(value, body, context))
+                    .fold(Observable(onError("undefined", s"""Field "$id" does not exists.""", renderer)))(value => validatorImpl(value, body, context))
 
                 case Alias(id, body) =>
 
                   obj.getField(body.id)
-                    .fold(Observable(renderer.onError(ERROR, "undefined", s"""Function "$id" does not exists."""))) { value =>
-
+                    .fold(Observable(onError("undefined", s"""Function "$id" does not exists.""", renderer))) { value =>
                       value
                         .call(extractArgs(body.args, context))
-                        .fold(Observable(renderer.onError(ERROR, "unprocessable", s"""Field "$id" is not a function."""))) { result =>
+                        .fold(Observable(onError("unprocessable", s"""Field "$id" is not a function.""", renderer))) { result =>
                           result
                             .flatMap(v => validatorImpl(v, body.body, context))
-                            .onErrorHandle(e => renderer.onError(ERROR, "function-call", e.getMessage))
+                            .onErrorHandle(e => onError("function-call", e.getMessage, renderer))
                         }
                     }
               }
-          }.intersperse(renderer.itemSeparator)
+          }
         }
     }
   }

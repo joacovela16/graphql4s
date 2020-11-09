@@ -36,7 +36,7 @@ object Main extends EncoderTypeDerivation with StructTypeDerivation {
            |    description
            |    fields(false){
            |      name
-           |      type{name}
+           |      type
            |    }
            |  }
            |  car

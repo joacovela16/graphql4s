@@ -24,6 +24,4 @@ case object JsonRenderer extends Renderer {
   override def onFieldStart(fieldName: String): String = s""""$fieldName": """
 
   override def onFieldEnd(fieldName: String): String = ""
-
-  override def onError(level: modux.graphql.model.LogLevel, code: String, message: String): String = s"""{"message": "$code", "message": "$message"}"""
 }

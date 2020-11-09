@@ -22,6 +22,4 @@ trait Renderer {
   def onFieldStart(fieldName: String): String
 
   def onFieldEnd(fieldName: String): String
-
-  def onError(level: LogLevel, code: String, message: String): String
 }
