@@ -141,8 +141,8 @@ object GraphQL {
   }
 
   private def onError(code: String, message: String, renderer: Renderer): String = {
-    val codeStr = s"${renderer.onFieldStart("code")}$code${renderer.onFieldEnd("code")}"
-    val msgStr = s"${renderer.onFieldStart("message")}$message${renderer.onFieldEnd("message")}"
+    val codeStr = s"""${renderer.onFieldStart("code")}"$code"${renderer.onFieldEnd("code")}"""
+    val msgStr = s"""${renderer.onFieldStart("message")}"$message"${renderer.onFieldEnd("message")}"""
     s"${renderer.onStartObject}$codeStr, $msgStr${renderer.onEndObject}"
   }
 
@@ -166,7 +166,7 @@ object GraphQL {
             .fromIterable(obj.fields)
             .flatMap { case (name, value) =>
               if (value.isFunction) {
-                Observable(onError("explicit", s"""Function "$name" must be called explicitly.""", renderer))
+                Observable(onError("explicit", s"Function '$name' must be called explicitly.", renderer))
               } else {
                 NONE
               }
@@ -185,7 +185,7 @@ object GraphQL {
               NONE
             } else {
               val duple: String = exprFinal.map(_.id).groupBy(identity).collect { case (x, ys) if ys.size > 1 => s"'$x'" }.mkString(", ")
-              Observable(onError("duplicated-key", s"Duplicated key $duple.", renderer))
+              Observable(onError("duplicated-key", s"Duplicated key '$duple'.", renderer))
             }
           }
 
@@ -198,7 +198,7 @@ object GraphQL {
                   if (context.fragments.contains(id)) {
                     NONE
                   } else {
-                    Observable(onError("undefined", s"""Fragment "$id" does not exists.""", renderer))
+                    Observable(onError("undefined", s"Fragment '$id' does not exists.", renderer))
                   }
 
                 case FunctionExtractor(id, args, body) =>
@@ -212,23 +212,23 @@ object GraphQL {
                             .onErrorHandle { e =>
                               onError("function-call", e.getMessage, renderer)
                             }
-                        case None => Observable(onError("unprocessable", s"""Field "$id" is not a function.""", renderer))
+                        case None => Observable(onError("unprocessable", s"Field '$id' is not a function.", renderer))
                       }
-                    case None => Observable(onError("undefined", s"""Function "$id" does not exists.""", renderer))
+                    case None => Observable(onError("undefined", s"Function '$id' does not exists.", renderer))
                   }
 
                 case ObjExtractor(id, body) =>
                   obj
                     .getField(id)
-                    .fold(Observable(onError("undefined", s"""Field "$id" does not exists.""", renderer)))(value => validatorImpl(value, body, context))
+                    .fold(Observable(onError("undefined", s"Field '$id' does not exists.", renderer)))(value => validatorImpl(value, body, context))
 
                 case Alias(id, body) =>
 
                   obj.getField(body.id)
-                    .fold(Observable(onError("undefined", s"""Function "$id" does not exists.""", renderer))) { value =>
+                    .fold(Observable(onError("undefined", s"Function '$id' does not exists.", renderer))) { value =>
                       value
                         .call(extractArgs(body.args, context))
-                        .fold(Observable(onError("unprocessable", s"""Field "$id" is not a function.""", renderer))) { result =>
+                        .fold(Observable(onError("unprocessable", s"Field '$id' is not a function.", renderer))) { result =>
                           result
                             .flatMap(v => validatorImpl(v, body.body, context))
                             .onErrorHandle(e => onError("function-call", e.getMessage, renderer))
