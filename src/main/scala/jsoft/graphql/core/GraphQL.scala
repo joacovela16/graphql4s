@@ -63,6 +63,7 @@ object GraphQL {
       case x: IFunction if x.argumentsLength == 0 => invokeFunction(x, FunctionExtractor("tmp", Nil, expr.toList), context)
       case IAsync(data) => data.flatMap(x => projector(x, expr, context))
       case IArray(data) =>
+
         val middle: Observable[String] = data.flatMap(x => projector(x, expr, context) :+ renderer.itemSeparator).dropLast(1)
         renderer.itemStart +: middle :+ renderer.itemEnd
 
@@ -71,7 +72,6 @@ object GraphQL {
       case obj: IObject =>
 
         if (expr.isEmpty) {
-
           val middle: Observable[String] = Observable
             .fromIterable(obj.fields)
             .filterNot { case (_, value) => value.isFunction }
@@ -89,6 +89,7 @@ object GraphQL {
             }
             .flatMap {
               case func: FunctionExtractor =>
+
 
                 obj
                   .getField(func.id)
@@ -111,6 +112,7 @@ object GraphQL {
 
           renderer.onStartObject +: middle :+ renderer.onEndObject
         }
+      case _ => NONE
     }
 
   }
@@ -232,19 +234,8 @@ object GraphQL {
 
                 case FunctionExtractor(id, args, body) =>
                   obj.getField(id) match {
-                    case Some(value) =>
-
-                      value.call(extractArgs(args, context)) match {
-                        case Some(result) =>
-                          result
-                            .flatMap(v => validatorImpl(v, body, context))
-                            .onErrorHandle { e =>
-                              e.printStackTrace()
-                              onError("function-call", e.getMessage, renderer)
-                            }
-                        case None => Observable(onError("unprocessable", s"Field '$id' is not a function.", renderer))
-                      }
                     case None => Observable(onError("undefined", s"Function '$id' does not exists.", renderer))
+                    case _ => NONE
                   }
 
                 case ObjExtractor(id, body, directive) =>
@@ -281,6 +272,7 @@ object GraphQL {
     val context: Context = Context(fragmentDef, accessor, rend)
 
     taskValidator(value, others, context).switchIfEmpty(projector(value, others, context))
+    //projector(value, others, context)
   }
 
   private def introspection(binding: Binding): Try[Executor] = {
@@ -466,7 +458,12 @@ object GraphQL {
             .fromTask(Task.fromFuture(link.build(queryParams, body)))
             .flatMap { accessor =>
               accessor.query match {
-                case Some(value) => Observable.fromTask(Parser.processor(value)).flatMap(xs => eval(valueSchema, accessor, xs, renderer))
+                case Some(value) =>
+                  Observable
+                    .fromTask(Parser.processor(value))
+                    .flatMap { xs =>
+                      eval(valueSchema, accessor, xs, renderer)
+                    }
                 case None => Observable.raiseError(new RuntimeException("query or mutation required"))
               }
             }

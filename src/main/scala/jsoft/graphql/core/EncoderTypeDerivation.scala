@@ -1,21 +1,20 @@
 package jsoft.graphql.core
 
-import io.circe.generic.AutoDerivation
-import io.circe.parser._
+import com.fasterxml.jackson.databind.json.JsonMapper
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import jsoft.graphql.model.Encoder
 import monix.reactive.Observable
 
 import scala.language.experimental.macros
 import scala.language.{higherKinds, implicitConversions}
+import scala.reflect.ClassTag
 
-trait EncoderTypeDerivation extends AutoDerivation {
+trait EncoderTypeDerivation {
 
+  private final val mapper = JsonMapper.builder().addModule(DefaultScalaModule).build()
 
-  implicit def createEncoder[T](implicit d: io.circe.Decoder[T]): Encoder[T] = (data: String) => {
-    decode[T](data) match {
-      case Left(value) => Observable.raiseError(value)
-      case Right(value) => Observable.pure(value)
-    }
+  implicit def createEncoder[T](implicit classTag: ClassTag[T]): Encoder[T] = (data: String) => {
+    Observable.pure(mapper.readValue(data, classTag.runtimeClass).asInstanceOf[T])
   }
 }
 

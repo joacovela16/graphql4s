@@ -96,6 +96,12 @@ trait StructTypeDerivation extends ImplicitUtils {
 
   private implicit def asError(msg: String): InterpreterError = InterpreterError(msg)
 
+  implicit val unitEnc: IBuild[Unit] = new IBuild[Unit] {
+    override def schema: Type = Type(SCALAR, "Unit")
+
+    override def apply(d: Unit): Executor = IUnit
+  }
+
   implicit val stringEnc: IBuild[String] = new IBuild[String] {
     override def schema: Type = Type(SCALAR, "String")
 
@@ -169,7 +175,8 @@ trait StructTypeDerivation extends ImplicitUtils {
         override def invoke(args: Seq[String]): Observable[Executor] = args match {
           case x +: Nil =>
             e(x).map(d).map(build(_))
-          case _ => Observable.raiseError(new RuntimeException("Calling error"))
+          case _ =>
+            Observable.raiseError(new RuntimeException("Calling error"))
         }
       }
     }

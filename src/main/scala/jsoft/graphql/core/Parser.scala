@@ -40,7 +40,9 @@ object Parser {
 
   private def name[_: P]: P[String] = P(CharsWhileIn("_a-zA-Z0-9", 1).!)
 
-  private def stringQuoted[_: P]: P[String] = P("\"" ~ name ~ "\"")
+  private def stringQuoted[_: P]: P[String] = P( "\"" ~ name ~ "\"" ).map(x=> "\"" + x + "\"")
+
+  private def stringSimple[_: P]: P[String] = P("'" ~ name ~ "'").map(x=> "'" + x + "'")
 
   private def number[_: P]: P[String] = P(((CharIn("1-9") ~ CharsWhileIn("0-9", 0)) ~ ("." ~ CharsWhileIn("0-9", 1)).?).!)
 
@@ -48,7 +50,7 @@ object Parser {
 
   private def variableRef[_: P]: P[RefVal] = P("$" ~ name).map(ValueRef)
 
-  private def fieldExp[_: P]: P[ObjExtractor] = P(name ~ directive.? ).map{ case (str, maybeExpr) => ObjExtractor(str, Nil, maybeExpr)}
+  private def fieldExp[_: P]: P[ObjExtractor] = P(name ~ directive.?).map { case (str, maybeExpr) => ObjExtractor(str, Nil, maybeExpr) }
 
   private def directiveArgs[_: P]: P[DirectiveArg] = P(name ~ ":" ~ variableRef).map { case (str, refVal) => DirectiveArg(str, refVal) }
 
@@ -57,9 +59,9 @@ object Parser {
 
   private def args[_: P]: P[Seq[RefVal]] = P(
     (
-      name.map(x => LiteralValue(x, isNumber = false)) |
-        number.map(x => LiteralValue(x, isNumber = true)) |
+      number.map(x => LiteralValue(x, isNumber = true)) |
         stringQuoted.map(x => LiteralValue(x, isNumber = false)) |
+        stringSimple.map(x => LiteralValue(x, isNumber = false)) |
         variableRef
       ).rep(sep = ",")
   )
@@ -70,7 +72,9 @@ object Parser {
 
   private def objExpr[_: P]: P[Expr] = P(name ~ directive.? ~ "{" ~ bodyExpr.? ~ "}").map { case (str, dir, body) => ObjExtractor(str, body.getOrElse(Nil), dir) }
 
-  private def funcExpr[_: P]: P[FunctionExtractor] = P(name ~ "(" ~ args ~ ")" ~ ("{" ~ bodyExpr.? ~ "}").?).map { case (n, args, body) => FunctionExtractor(n, args.toList, body.flatten.getOrElse(Nil)) }
+  private def funcExpr[_: P]: P[FunctionExtractor] = P(name ~ "(" ~ args ~ ")" ~ ("{" ~ bodyExpr.? ~ "}").?).map { case (n, args, body) =>
+    FunctionExtractor(n, args.toList, body.flatten.getOrElse(Nil))
+  }
 
   private def bodyExpr[_: P]: P[List[Expr]] = P((fragmentExpr | aliasExpr | objExpr | funcExpr | fragmentIdExpr | fieldExp) ~ bodyExpr.?).map { case (expr, maybeExpr) =>
     maybeExpr match {

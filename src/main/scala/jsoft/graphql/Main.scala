@@ -24,7 +24,7 @@ object Main extends EncoderTypeDerivation with StructTypeDerivation {
 
   case class Query(c1: Class1, car: List[Car], name: String, current: CurrentLocation, height: Int => Location, list: List[Location])
 
-  case class Mutation(number: Int)
+  case class Mutation(createUser: Fiat => Unit)
 
   sealed trait Class1
 
@@ -37,15 +37,15 @@ object Main extends EncoderTypeDerivation with StructTypeDerivation {
     val query: Map[String, String] = Map(
       "query" ->
         """|{
-           |  car {
-           |    model @skip(if: $var1)
+           |  createUser($var2){
            |  }
            |}
            |""".stripMargin,
       "variables" ->
         """
           |{
-          | "var1": true
+          | "var1": true,
+          | "var2": {model: "strada", year: 2020}
           |}
           |""".stripMargin
     )
@@ -61,11 +61,13 @@ object Main extends EncoderTypeDerivation with StructTypeDerivation {
       List(Location(1, 2), Location(3, 4))
     )
 
-    val mutationInstance: Mutation = Mutation(10)
+    val mutationInstance: Mutation = {
+      Mutation(fiat => println(fiat))
+    }
 
     val binding: Binding = queryInstance.asQuery + mutationInstance.asMutation
 
-    val intPromise: (Map[String, String], Option[String]) => Observable[String] = GraphQL.interpreter(binding)
+    val intPromise = GraphQL.interpreter(binding)
 
     val start: Long = System.currentTimeMillis()
     val r: Observable[String] = intPromise(query, None)
