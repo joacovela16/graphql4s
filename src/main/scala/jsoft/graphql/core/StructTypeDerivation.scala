@@ -1,5 +1,7 @@
 package jsoft.graphql.core
 
+import akka.stream.Materializer
+import akka.stream.scaladsl.{Sink, Source}
 import jsoft.graphql.annotations.{GQLDescription, GQLUnion}
 import jsoft.graphql.lib.ImplicitUtils
 import jsoft.graphql.model.executor._
@@ -119,7 +121,22 @@ trait StructTypeDerivation extends ImplicitUtils {
     override def apply(d: Double): Executor = IDouble(d)
   }
 
-  implicit def iterableEnc[A, C[x] <: Iterable[x]](implicit e: IBuild[A]): IBuild[C[A]] = new IBuild[C[A]] {
+  implicit def akkaSourceEnc[A, B](implicit aEnc: IBuild[A], mat: Materializer): IBuild[Source[A, B]] = new IBuild[Source[A, B]] {
+    private val _type: Type = graphql.Type(
+      LIST,
+      "List",
+      ofType = () => Some(aEnc.schema)
+    )
+
+    override def schema: Type = _type
+
+    override def apply(d: Source[A, B]): Executor = {
+      val data: Future[Seq[A]] = d.runWith(Sink.seq)
+      IArray(Observable.fromFuture(data).flatMapIterable(x => x.map(y => aEnc(y)).toList))
+    }
+  }
+
+  implicit def iterableEnc[A, C[x] <: TraversableOnce[x]](implicit e: IBuild[A]): IBuild[C[A]] = new IBuild[C[A]] {
 
     private val _type: Type = graphql.Type(
       LIST,
@@ -130,7 +147,7 @@ trait StructTypeDerivation extends ImplicitUtils {
     override def schema: Type = _type
 
     override def apply(d: C[A]): Executor = {
-      IArray(Observable.fromIterable(d).map(e.apply))
+      IArray(Observable.fromIterable(d.toIterable).map(e.apply))
     }
   }
 

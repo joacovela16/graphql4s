@@ -1,16 +1,16 @@
 package jsoft.graphql.core
 
 import jsoft.graphql.core.Parser.{Expr, FragmentDef, FunctionExtractor, RefVal, _}
-import jsoft.graphql.defaults.{Introspection, JsonRenderer, LinkImpl}
+import jsoft.graphql.defaults.{DataExtractorImpl, Introspection, JsonRenderer}
 import jsoft.graphql.model.executor._
 import jsoft.graphql.model.graphql._
-import jsoft.graphql.model.{Accessor, Binding, Link, Renderer}
+import jsoft.graphql.model.{Accessor, Binding, DataExtractor, Interpreter, ParserError, Renderer}
 import monix.eval.Task
 import monix.reactive.Observable
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.mutable
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 import scala.language.{existentials, implicitConversions}
 import scala.util.{Failure, Success, Try}
 
@@ -90,7 +90,6 @@ object GraphQL {
             .flatMap {
               case func: FunctionExtractor =>
 
-
                 obj
                   .getField(func.id)
                   .fold(NONE)(value => renderField(func.id, invokeFunction(value, func, context), renderer))
@@ -108,6 +107,7 @@ object GraphQL {
                 obj
                   .getField(body.id)
                   .fold(NONE)(value => renderField(id, invokeFunction(value, body, context), renderer))
+              case _ => NONE
             }.dropLast(1)
 
           renderer.onStartObject +: middle :+ renderer.onEndObject
@@ -124,6 +124,13 @@ object GraphQL {
     }.flatten
   }
 
+  private def makeErrorResult(items: Observable[String], rend: Renderer): Observable[String] = {
+    val start: Observable[String] = Observable(rend.onStartObject, rend.onFieldStart("errors"), rend.itemStart)
+    val end: Observable[String] = Observable(rend.onFieldEnd("errors"), rend.itemEnd, rend.onEndObject)
+
+    start ++ items.intersperse(rend.itemSeparator) ++ end
+  }
+
   private def taskValidator(value: Executor, expr: Iterable[Expr], context: Context): Observable[String] = {
 
     val rend: Renderer = context.renderer
@@ -135,11 +142,7 @@ object GraphQL {
         if (isEmpty) {
           NONE
         } else {
-
-          val start: Observable[String] = Observable(rend.onStartObject, rend.onFieldStart("errors"), rend.itemStart)
-          val end: Observable[String] = Observable(rend.onFieldEnd("errors"), rend.itemEnd, rend.onEndObject)
-
-          start ++ validationObs.intersperse(context.renderer.itemSeparator) ++ end
+          makeErrorResult(validationObs, rend)
         }
       }
   }
@@ -233,9 +236,14 @@ object GraphQL {
                   }
 
                 case FunctionExtractor(id, args, body) =>
-                  obj.getField(id) match {
-                    case None => Observable(onError("undefined", s"Function '$id' does not exists.", renderer))
-                    case _ => NONE
+                  if (args.forall(x => Lib.existsVal(x, context))) {
+
+                    obj.getField(id) match {
+                      case None => Observable(onError("undefined", s"Function '$id' does not exists.", renderer))
+                      case _ => NONE
+                    }
+                  } else {
+                    Observable(onError("undefined", s"Function '$id' requires variables ${args.collect { case ValueRef(id) => Lib.quote(id) }.mkString(", ")} .", renderer))
                   }
 
                 case ObjExtractor(id, body, directive) =>
@@ -258,6 +266,7 @@ object GraphQL {
                             .onErrorHandle(e => onError("function-call", e.getMessage, renderer))
                         }
                     }
+                case _ => NONE
               }
           }
         }
@@ -272,7 +281,6 @@ object GraphQL {
     val context: Context = Context(fragmentDef, accessor, rend)
 
     taskValidator(value, others, context).switchIfEmpty(projector(value, others, context))
-    //projector(value, others, context)
   }
 
   private def introspection(binding: Binding): Try[Executor] = {
@@ -438,7 +446,8 @@ object GraphQL {
     }
   }
 
-  def interpreter(bind: Binding, link: Link = LinkImpl, renderer: Renderer = JsonRenderer)(implicit ec: ExecutionContext): (Map[String, String], Option[String]) => Observable[String] = {
+  def interpreter(bind: Binding, extractor: DataExtractor = DataExtractorImpl, renderer: Renderer = JsonRenderer) /*(implicit ec: ExecutionContext)*/ : Interpreter = {
+    import monix.execution.Scheduler.Implicits.global
 
     introspection(bind) match {
       case Failure(exception) =>
@@ -455,16 +464,23 @@ object GraphQL {
         (queryParams: Map[String, String], body: Option[String]) => {
 
           Observable
-            .fromTask(Task.fromFuture(link.build(queryParams, body)))
+            .fromTask(Task.fromFuture(extractor.build(queryParams, body)))
             .flatMap { accessor =>
               accessor.query match {
                 case Some(value) =>
+
                   Observable
                     .fromTask(Parser.processor(value))
                     .flatMap { xs =>
                       eval(valueSchema, accessor, xs, renderer)
                     }
-                case None => Observable.raiseError(new RuntimeException("query or mutation required"))
+                    .onErrorHandleWith {
+                      case pe: ParserError =>
+                        makeErrorResult(Observable(onError("syntax", pe.getMessage, renderer)), renderer)
+                    }
+
+                case None =>
+                  makeErrorResult(Observable(onError("unprocessable", "Query undefined", renderer)), renderer)
               }
             }
         }

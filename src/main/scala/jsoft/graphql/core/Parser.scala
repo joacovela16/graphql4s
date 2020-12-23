@@ -2,6 +2,7 @@ package jsoft.graphql.core
 
 import fastparse.MultiLineWhitespace._
 import fastparse.{CharIn, CharsWhileIn, P, Parsed, parse, _}
+import jsoft.graphql.model.ParserError
 import monix.eval.Task
 
 import scala.io.Source
@@ -40,9 +41,9 @@ object Parser {
 
   private def name[_: P]: P[String] = P(CharsWhileIn("_a-zA-Z0-9", 1).!)
 
-  private def stringQuoted[_: P]: P[String] = P( "\"" ~ name ~ "\"" ).map(x=> "\"" + x + "\"")
+  private def stringQuoted[_: P]: P[String] = P("\"" ~ name ~ "\"").map(x => "\"" + x + "\"")
 
-  private def stringSimple[_: P]: P[String] = P("'" ~ name ~ "'").map(x=> "'" + x + "'")
+  private def stringSimple[_: P]: P[String] = P("'" ~ name ~ "'").map(x => "'" + x + "'")
 
   private def number[_: P]: P[String] = P(((CharIn("1-9") ~ CharsWhileIn("0-9", 0)) ~ ("." ~ CharsWhileIn("0-9", 1)).?).!)
 
@@ -88,7 +89,7 @@ object Parser {
   def processor(input: String): Task[List[Expr]] = {
     Task(parse(input, start(_))).flatMap {
       case Parsed.Success(value, _) => Task.pure(value)
-      case failure: Parsed.Failure => Task.raiseError(new RuntimeException(failure.msg))
+      case failure: Parsed.Failure => Task.raiseError(ParserError(failure))
     }
   }
 
