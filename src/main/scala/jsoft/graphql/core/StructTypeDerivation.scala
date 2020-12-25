@@ -9,6 +9,7 @@ import jsoft.graphql.model.graphql.{ENUM, Field, INPUT_OBJECT, INTERFACE, Kind, 
 import jsoft.graphql.model.{Binding, Encoder, IBuild, graphql}
 import magnolia._
 import monix.reactive.Observable
+import org.reactivestreams.Publisher
 
 import scala.collection.mutable
 import scala.concurrent.Future
@@ -131,8 +132,9 @@ trait StructTypeDerivation extends ImplicitUtils {
     override def schema: Type = _type
 
     override def apply(d: Source[A, B]): Executor = {
-      val data: Future[Seq[A]] = d.runWith(Sink.seq)
-      IArray(Observable.fromFuture(data).flatMapIterable(x => x.map(y => aEnc(y)).toList))
+      val publisher: Publisher[A] = d.runWith(Sink.asPublisher[A](fanout = false))
+      val observable: Observable[A] = Observable.fromReactivePublisher(publisher)
+      IArray(observable.flatMapIterable(x => x.map(y => aEnc(y)).toList))
     }
   }
 

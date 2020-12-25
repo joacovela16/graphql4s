@@ -275,12 +275,14 @@ object GraphQL {
     }
   }
 
-  private def eval(value: Executor, accessor: Accessor, expr: List[Expr], rend: Renderer): Observable[String] = {
+  private def validate(value: Executor, context: Context): Observable[String] = {
+    taskValidator(value, context.expr, context)
+  }
+
+  private def buildContext(accessor: Accessor, expr: List[Expr], rend: Renderer): Context = {
     val (fragmentDefInit, others) = expr.partition(_.isInstanceOf[FragmentDef])
     val fragmentDef: Map[String, FragmentDef] = fragmentDefInit.collect { case x: FragmentDef => x }.map(x => x.id -> x).toMap
-    val context: Context = Context(fragmentDef, accessor, rend)
-
-    taskValidator(value, others, context).switchIfEmpty(projector(value, others, context))
+    Context(others, fragmentDef, accessor, rend)
   }
 
   private def introspection(binding: Binding): Try[Executor] = {
@@ -442,50 +444,86 @@ object GraphQL {
 
     querySystem match {
       case Some(query) => Try(resolver(query, mutationSystem, binding))
-      case None => Failure(new RuntimeException("Query jsoft.graphql.model must be instantiate"))
+      case None => Failure(new RuntimeException("Query must be instantiate"))
     }
   }
 
-  def interpreter(bind: Binding, extractor: DataExtractor = DataExtractorImpl, renderer: Renderer = JsonRenderer) /*(implicit ec: ExecutionContext)*/ : Interpreter = {
+  def interpreter(
+                   bind: Binding,
+                   extractor: DataExtractor = DataExtractorImpl,
+                   renderer: Renderer = JsonRenderer,
+                   enableSchemaValidation: Boolean = true,
+                   enableIntrospection: Boolean = true
+                 ): Interpreter = {
+
     import monix.execution.Scheduler.Implicits.global
 
-    introspection(bind) match {
-      case Failure(exception) =>
+    val executorTry: Try[Executor] = {
+      if (enableIntrospection) {
+        introspection(bind).map(ex => bind.executor.joinFields(ex))
+      } else {
+        Success(bind.executor)
+      }
+    }
 
+    executorTry match {
+      case Failure(exception) =>
         logger.error(exception.getLocalizedMessage, exception)
 
         (_: Map[String, String], _: Option[String]) => {
-          Observable.raiseError(new RuntimeException("System unavailable."))
+          makeErrorResult(Observable(onError("unprocessable", exception.getMessage, renderer)), renderer)
         }
 
-      case Success(introspectionExecutor) =>
+      case Success(executor) =>
 
-        val valueSchema: Executor = bind.executor.joinFields(introspectionExecutor)
-        (queryParams: Map[String, String], body: Option[String]) => {
+        if (enableSchemaValidation) {
 
-          Observable
-            .fromTask(Task.fromFuture(extractor.build(queryParams, body)))
-            .flatMap { accessor =>
-              accessor.query match {
-                case Some(value) =>
+          (queryParams: Map[String, String], body: Option[String]) => {
+            Observable
+              .fromTask(Task.fromFuture(extractor.build(queryParams, body)))
+              .flatMap { accessor =>
+                accessor.query match {
+                  case Some(value) =>
+                    Observable
+                      .fromTask(Parser.processor(value))
+                      .flatMap { xs =>
+                        val context: Context = buildContext(accessor, xs, renderer)
+                        validate(executor, context).switchIfEmpty(projector(executor, context.expr, context))
+                      }
+                      .onErrorHandleWith {
+                        case pe: ParserError => makeErrorResult(Observable(onError("syntax", pe.getMessage, renderer)), renderer)
+                      }
 
-                  Observable
-                    .fromTask(Parser.processor(value))
-                    .flatMap { xs =>
-                      eval(valueSchema, accessor, xs, renderer)
-                    }
-                    .onErrorHandleWith {
-                      case pe: ParserError =>
-                        makeErrorResult(Observable(onError("syntax", pe.getMessage, renderer)), renderer)
-                    }
-
-                case None =>
-                  makeErrorResult(Observable(onError("unprocessable", "Query undefined", renderer)), renderer)
+                  case None =>
+                    makeErrorResult(Observable(onError("unprocessable", "Query undefined", renderer)), renderer)
+                }
               }
-            }
+          }
+        } else {
+          (queryParams: Map[String, String], body: Option[String]) => {
+            Observable
+              .fromTask(Task.fromFuture(extractor.build(queryParams, body)))
+              .flatMap { accessor =>
+                accessor.query match {
+                  case Some(value) =>
+
+                    Observable
+                      .fromTask(Parser.processor(value))
+                      .flatMap { xs =>
+                        val context: Context = buildContext(accessor, xs, renderer)
+                        projector(executor, context.expr, context)
+                      }
+                      .onErrorHandleWith {
+                        case pe: ParserError => makeErrorResult(Observable(onError("syntax", pe.getMessage, renderer)), renderer)
+                      }
+
+                  case None =>
+                    makeErrorResult(Observable(onError("unprocessable", "Query undefined", renderer)), renderer)
+                }
+              }
+          }
         }
     }
-
   }
 
 }
