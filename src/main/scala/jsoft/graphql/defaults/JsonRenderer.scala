@@ -8,10 +8,13 @@ case object JsonRenderer extends Renderer {
   override def id: String = "application/json"
 
   override def onAtomic(d: IAtomic): String = d match {
-    case IString(value) => s""""$value""""
+    case IString(value) => addDoubleQ(value)
     case IDouble(value) => value.toString
     case IInt(value) => value.toString
     case IBoolean(value) => value.toString
+    case IZonedDateTime(value) => addDoubleQ(value.toString)
+    case ILocalTime(localTime) => addDoubleQ(localTime.toString)
+    case ILocalDateTime(localDateTime) => addDoubleQ(localDateTime.toString)
   }
 
   val itemStart: String = "["
@@ -24,4 +27,6 @@ case object JsonRenderer extends Renderer {
   override def onFieldStart(fieldName: String): String = s""""$fieldName": """
 
   override def onFieldEnd(fieldName: String): String = ""
+
+  private def addDoubleQ(value: String): String = s""""$value""""
 }

@@ -11,6 +11,7 @@ import magnolia._
 import monix.reactive.Observable
 import org.reactivestreams.Publisher
 
+import java.time.{LocalDateTime, LocalTime, ZonedDateTime}
 import scala.collection.mutable
 import scala.concurrent.Future
 import scala.language.experimental.macros
@@ -116,10 +117,26 @@ trait StructTypeDerivation extends ImplicitUtils {
 
     override def apply(d: Int): Executor = IInt(d)
   }
+
   implicit val doubleEnc: IBuild[Double] = new IBuild[Double] {
     override def schema: Type = Type(SCALAR, "Double")
 
     override def apply(d: Double): Executor = IDouble(d)
+  }
+
+  implicit val zonedDateTimeEnc: IBuild[ZonedDateTime] = new IBuild[ZonedDateTime] {
+    override def schema: Type = Type(SCALAR, "Date")
+    override def apply(d: ZonedDateTime): Executor = IZonedDateTime(d)
+  }
+
+  implicit val localDatetimeEnc: IBuild[LocalDateTime] = new IBuild[LocalDateTime] {
+    override def schema: Type = Type(SCALAR, "Date")
+    override def apply(d: LocalDateTime): Executor = ILocalDateTime(d)
+  }
+
+  implicit val localTimeEnc: IBuild[LocalTime] = new IBuild[LocalTime] {
+    override def schema: Type = Type(SCALAR, "Date")
+    override def apply(d: LocalTime): Executor = ILocalTime(d)
   }
 
   implicit def akkaSourceEnc[A, B](implicit aEnc: IBuild[A], mat: Materializer): IBuild[Source[A, B]] = new IBuild[Source[A, B]] {

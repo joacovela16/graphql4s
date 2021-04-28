@@ -1,25 +1,23 @@
 import Dependencies._
 
-ThisBuild / name := libName
+val localVersion = "0.1.2"
 ThisBuild / scalaVersion := scalaV
-ThisBuild / version := "0.1.0"
+ThisBuild / version := localVersion
 ThisBuild / organization := "jsoft.graphql4s"
 ThisBuild / organizationName := "jsoft"
 ThisBuild / scalacOptions := Seq("-language:implicitConversions")
 ThisBuild / licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html"))
 
-
 Global / onChangedBuildSource := ReloadOnSourceChanges
-bintrayReleaseOnPublish in ThisBuild := false
+ThisBuild / bintrayReleaseOnPublish := false
 
-
-lazy val disablingPublishingSettings = Seq(skip in publish := true, publishArtifact := false)
+lazy val disablingPublishingSettings = Seq(publish / skip := true, publishArtifact := false)
 
 lazy val enablingPublishingSettings = Seq(
   publishArtifact := true,
   publishMavenStyle := true,
   // http://www.scala-sbt.org/0.12.2/docs/Detailed-Topics/Artifacts.html
-  publishArtifact in Test := false,
+  Test / publishArtifact := false,
   // Bintray
   bintrayPackageLabels := Seq("scala", "sbt"),
   bintrayRepository := "maven",
@@ -29,8 +27,7 @@ lazy val enablingPublishingSettings = Seq(
 
 lazy val root = (project in file("."))
   .settings(
-    name:= libName,
-    version in publish := "0.1.1",
+    name := libName,
     libraryDependencies ++= Seq(
       propensive,
       ScalaReflect,
