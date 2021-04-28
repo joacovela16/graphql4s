@@ -6,6 +6,7 @@ case object Dependencies {
 
   lazy val libName = "graphql4s"
   lazy val scalaV = "2.12.12"
+  val scalaVersions: Seq[String] = Seq("2.12.13", "2.13.4")
   lazy val propensive = "com.propensive" %% "magnolia" % "0.17.0"
   lazy val ScalaReflect = "org.scala-lang" % "scala-reflect" % scalaV
   lazy val fastparse = "com.lihaoyi" %% "fastparse" % "2.2.2"

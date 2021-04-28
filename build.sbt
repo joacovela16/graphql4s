@@ -1,12 +1,12 @@
 import Dependencies._
 
 val localVersion = "0.1.2"
-ThisBuild / scalaVersion := scalaV
 ThisBuild / version := localVersion
 ThisBuild / organization := "jsoft.graphql4s"
 ThisBuild / organizationName := "jsoft"
 ThisBuild / scalacOptions := Seq("-language:implicitConversions")
 ThisBuild / licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html"))
+ThisBuild / versionScheme := Some("early-semver")
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 ThisBuild / bintrayReleaseOnPublish := false
@@ -28,6 +28,7 @@ lazy val enablingPublishingSettings = Seq(
 lazy val root = (project in file("."))
   .settings(
     name := libName,
+    crossScalaVersions := Dependencies.scalaVersions,
     libraryDependencies ++= Seq(
       propensive,
       ScalaReflect,
