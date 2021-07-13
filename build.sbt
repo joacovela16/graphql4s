@@ -9,10 +9,10 @@ ThisBuild / licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICE
 ThisBuild / versionScheme := Some("early-semver")
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
-ThisBuild / bintrayReleaseOnPublish := false
+// ThisBuild / bintrayReleaseOnPublish := false
 
 lazy val disablingPublishingSettings = Seq(publish / skip := true, publishArtifact := false)
-
+/* 
 lazy val enablingPublishingSettings = Seq(
   publishArtifact := true,
   publishMavenStyle := true,
@@ -24,7 +24,7 @@ lazy val enablingPublishingSettings = Seq(
   bintrayVcsUrl := Option("https://github.com/joacovela16/modux"),
   bintrayOrganization := Option("jsoft"),
 )
-
+ */
 lazy val root = (project in file("."))
   .settings(
     name := libName,
@@ -40,6 +40,5 @@ lazy val root = (project in file("."))
       JacksonCore,
       JacksonDatabind,
       Slf4jApi
-    ),
-    enablingPublishingSettings
+    )
   )

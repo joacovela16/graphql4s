@@ -2,7 +2,7 @@ import sbt._
 
 case object Dependencies {
 
-  private final val akkaVersion: String = "2.6.10"
+  private final val akkaVersion: String = "2.6.14"
 
   lazy val libName = "graphql4s"
   lazy val scalaV = "2.12.12"
